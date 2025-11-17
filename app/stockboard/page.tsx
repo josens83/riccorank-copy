@@ -1,16 +1,54 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useThemeStore } from '@/lib/store';
-import { mockPosts, mockStockSentiment } from '@/lib/mockData';
+import { mockStockSentiment } from '@/lib/mockData';
 import { FiMessageCircle, FiThumbsUp, FiEye, FiSend, FiRefreshCw, FiEdit } from 'react-icons/fi';
 import Link from 'next/link';
+import { Post } from '@/lib/types';
 
 export default function StockBoardPage() {
   const { isDarkMode } = useThemeStore();
   const [activeTab, setActiveTab] = useState<'all' | 'popular' | 'stock' | 'free' | 'notice'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSort, setSelectedSort] = useState('최신순');
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [activeTab, searchQuery, selectedSort]);
+
+  const fetchPosts = async () => {
+    setIsLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (activeTab !== 'all') {
+        if (activeTab === 'popular') {
+          params.append('isPopular', 'true');
+        } else {
+          params.append('category', activeTab);
+        }
+      }
+      if (searchQuery) {
+        params.append('search', searchQuery);
+      }
+      if (selectedSort === '인기순') {
+        params.append('sortBy', 'likes');
+      } else if (selectedSort === '조회순') {
+        params.append('sortBy', 'views');
+      }
+
+      const response = await fetch(`/api/posts?${params.toString()}`);
+      if (!response.ok) throw new Error('Failed to fetch posts');
+      const data = await response.json();
+      setPosts(data.data || []);
+    } catch (error) {
+      console.error('Failed to fetch posts:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const tabs = [
     { key: 'all' as const, label: '전체' },
@@ -136,15 +174,21 @@ export default function StockBoardPage() {
                     </p>
                   </div>
                   <div className="flex space-x-2">
-                    <button className={`p-2 rounded-md ${
-                      isDarkMode ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-600 text-white hover:bg-blue-700'
-                    } transition-colors`}>
+                    <Link
+                      href="/stockboard/write"
+                      className={`flex items-center px-4 py-2 rounded-md ${
+                        isDarkMode ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-600 text-white hover:bg-blue-700'
+                      } transition-colors`}
+                    >
                       <FiEdit className="w-5 h-5" />
                       <span className="ml-1 text-sm">글쓰기</span>
-                    </button>
-                    <button className={`p-2 rounded-md ${
-                      isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'
-                    } transition-colors`}>
+                    </Link>
+                    <button
+                      onClick={fetchPosts}
+                      className={`p-2 rounded-md ${
+                        isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'
+                      } transition-colors`}
+                    >
                       <FiRefreshCw className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-gray-700'}`} />
                     </button>
                   </div>
@@ -203,60 +247,70 @@ export default function StockBoardPage() {
 
               {/* Posts List */}
               <div className="space-y-4">
-                {mockPosts.map((post) => (
-                  <Link
-                    key={post.id}
-                    href={`/stockboard/${post.id}`}
-                    className={`block p-4 rounded-lg border ${
-                      isDarkMode
-                        ? 'border-gray-700 hover:bg-gray-700/50'
-                        : 'border-gray-200 hover:bg-gray-50'
-                    } transition-all`}
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        {post.isPopular && (
-                          <span className="px-2 py-0.5 bg-orange-500 text-white text-xs font-bold rounded">
-                            인기
-                          </span>
-                        )}
-                        {getCategoryBadge(post.category)}
-                      </div>
-                      <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {getTimeAgo(post.createdAt)}
-                      </span>
-                    </div>
-
-                    <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                      {post.title}
-                    </h3>
-
-                    <p className={`text-sm mb-3 line-clamp-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      {post.content}
-                    </p>
-
-                    <div className="flex items-center justify-between">
-                      <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                        재이고ㅡ님
+                {isLoading ? (
+                  <div className={`text-center py-8 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    로딩 중...
+                  </div>
+                ) : posts.length === 0 ? (
+                  <div className={`text-center py-8 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    게시글이 없습니다
+                  </div>
+                ) : (
+                  posts.map((post) => (
+                    <Link
+                      key={post.id}
+                      href={`/stockboard/${post.id}`}
+                      className={`block p-4 rounded-lg border ${
+                        isDarkMode
+                          ? 'border-gray-700 hover:bg-gray-700/50'
+                          : 'border-gray-200 hover:bg-gray-50'
+                      } transition-all`}
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center space-x-2">
+                          {post.isPopular && (
+                            <span className="px-2 py-0.5 bg-orange-500 text-white text-xs font-bold rounded">
+                              인기
+                            </span>
+                          )}
+                          {getCategoryBadge(post.category)}
+                        </div>
+                        <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {getTimeAgo(post.createdAt)}
+                        </span>
                       </div>
 
-                      <div className="flex items-center space-x-4 text-sm">
-                        <div className="flex items-center space-x-1 text-gray-400">
-                          <FiEye className="w-4 h-4" />
-                          <span>{post.views.toLocaleString()}</span>
+                      <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {post.title}
+                      </h3>
+
+                      <p className={`text-sm mb-3 line-clamp-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {post.content}
+                      </p>
+
+                      <div className="flex items-center justify-between">
+                        <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                          {post.author?.name || post.author?.email || '익명'}
                         </div>
-                        <div className="flex items-center space-x-1 text-gray-400">
-                          <FiThumbsUp className="w-4 h-4" />
-                          <span>{post._count?.likes || 0}</span>
-                        </div>
-                        <div className="flex items-center space-x-1 text-gray-400">
-                          <FiMessageCircle className="w-4 h-4" />
-                          <span>{post._count?.comments || 0}</span>
+
+                        <div className="flex items-center space-x-4 text-sm">
+                          <div className="flex items-center space-x-1 text-gray-400">
+                            <FiEye className="w-4 h-4" />
+                            <span>{post.views?.toLocaleString() || 0}</span>
+                          </div>
+                          <div className="flex items-center space-x-1 text-gray-400">
+                            <FiThumbsUp className="w-4 h-4" />
+                            <span>{post.likeCount || 0}</span>
+                          </div>
+                          <div className="flex items-center space-x-1 text-gray-400">
+                            <FiMessageCircle className="w-4 h-4" />
+                            <span>{post.commentCount || 0}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  ))
+                )}
               </div>
             </div>
           </div>
@@ -279,7 +333,7 @@ export default function StockBoardPage() {
               </div>
 
               <div className="space-y-3">
-                {mockPosts.slice(0, 3).map((post, index) => (
+                {posts.slice(0, 3).map((post, index) => (
                   <Link
                     key={post.id}
                     href={`/stockboard/${post.id}`}
@@ -310,15 +364,15 @@ export default function StockBoardPage() {
                       <div className="flex items-center space-x-2">
                         <div className="flex items-center space-x-1 text-gray-400">
                           <FiEye className="w-3 h-3" />
-                          <span>{post.views.toLocaleString()}</span>
+                          <span>{post.views?.toLocaleString() || 0}</span>
                         </div>
                         <div className="flex items-center space-x-1 text-gray-400">
                           <FiThumbsUp className="w-3 h-3" />
-                          <span>{post._count?.likes || 0}</span>
+                          <span>{post.likeCount || 0}</span>
                         </div>
                         <div className="flex items-center space-x-1 text-gray-400">
                           <FiMessageCircle className="w-3 h-3" />
-                          <span>{post._count?.comments || 0}</span>
+                          <span>{post.commentCount || 0}</span>
                         </div>
                       </div>
                     </div>
