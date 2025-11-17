@@ -2,6 +2,7 @@
 
 import "./globals.css";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import SessionProvider from "@/components/SessionProvider";
 import { ToastProvider } from "@/components/Toast";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -37,8 +38,13 @@ export default function RootLayout({
         <ErrorBoundary>
           <ToastProvider>
             <SessionProvider>
-              <Header />
-              {children}
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1">
+                  {children}
+                </main>
+                <Footer />
+              </div>
             </SessionProvider>
           </ToastProvider>
         </ErrorBoundary>
