@@ -5,12 +5,12 @@ import { useState } from 'react';
 import { useThemeStore, useLanguageStore } from '@/lib/store';
 import { useSession, signOut } from 'next-auth/react';
 import { FiSearch, FiMoon, FiSun, FiChevronDown, FiUser, FiLogOut } from 'react-icons/fi';
+import GlobalSearch from './GlobalSearch';
 
 const Header = () => {
   const { isDarkMode, toggleDarkMode } = useThemeStore();
   const { language, setLanguage } = useLanguageStore();
   const { data: session, status } = useSession();
-  const [searchQuery, setSearchQuery] = useState('');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const menuItems = [
@@ -125,19 +125,8 @@ const Header = () => {
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
             {/* Search */}
-            <div className="relative hidden md:block">
-              <input
-                type="text"
-                placeholder="검색"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-48 pl-10 pr-4 py-2 rounded-md text-sm border ${
-                  isDarkMode
-                    ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400'
-                    : 'bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500'
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              />
-              <FiSearch className={`absolute left-3 top-2.5 w-5 h-5 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+            <div className="hidden md:block">
+              <GlobalSearch />
             </div>
 
             {/* Dark Mode Toggle */}
