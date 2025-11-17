@@ -73,8 +73,10 @@ export interface Post {
 export interface Comment {
   id: string;
   content: string;
-  userId: string;
-  user?: User;
+  authorId: string;
+  userId?: string; // Deprecated: use authorId
+  author?: User;
+  user?: User; // Deprecated: use author
   postId: string;
   parentId?: string;
   replies?: Comment[];
@@ -92,9 +94,11 @@ export interface Like {
 export interface User {
   id: string;
   email: string;
-  name?: string;
+  name: string;
   image?: string;
   provider?: string;
+  role: 'user' | 'admin';
+  suspended: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

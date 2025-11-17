@@ -1,6 +1,6 @@
 // Mock Data for Development
 
-import { Stock, MarketIndex, News, Post, PopularSearch, ThemeStock, StockSentiment } from './types';
+import { Stock, MarketIndex, News, Post, PopularSearch, ThemeStock, StockSentiment, User, Comment } from './types';
 
 export const mockPopularSearches: PopularSearch[] = [
   { rank: 1, symbol: '005930', name: '삼성SDI', code: '006400', change: 3000, changePercent: 0.95 },
@@ -416,6 +416,105 @@ export const mockStockSentiment: StockSentiment[] = [
   },
 ];
 
+export const mockUsers: User[] = [
+  {
+    id: '1',
+    email: 'admin@rankup.com',
+    name: '관리자',
+    role: 'admin',
+    suspended: false,
+    provider: 'credentials',
+    createdAt: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // 1 year ago
+    updatedAt: new Date(),
+  },
+  {
+    id: '2',
+    email: 'user1@example.com',
+    name: '김투자',
+    role: 'user',
+    suspended: false,
+    provider: 'credentials',
+    createdAt: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months ago
+    updatedAt: new Date(),
+  },
+  {
+    id: '3',
+    email: 'user2@example.com',
+    name: '이주식',
+    role: 'user',
+    suspended: false,
+    provider: 'google',
+    image: 'https://lh3.googleusercontent.com/a/default-user',
+    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
+    updatedAt: new Date(),
+  },
+  {
+    id: '4',
+    email: 'user3@example.com',
+    name: '박분석',
+    role: 'user',
+    suspended: false,
+    provider: 'credentials',
+    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 1 month ago
+    updatedAt: new Date(),
+  },
+  {
+    id: '5',
+    email: 'suspended@example.com',
+    name: '정스팸',
+    role: 'user',
+    suspended: true,
+    provider: 'credentials',
+    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 2 months ago
+    updatedAt: new Date(),
+  },
+];
+
+export const mockComments: Comment[] = [
+  {
+    id: '1',
+    content: '한국전력 정말 좋은 분석이네요! 저도 보유 중입니다.',
+    authorId: '2',
+    postId: '1',
+    createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
+    updatedAt: new Date(),
+  },
+  {
+    id: '2',
+    content: '전력 수요가 계속 증가하고 있어서 장기적으로 좋아 보입니다.',
+    authorId: '3',
+    postId: '1',
+    parentId: '1',
+    createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
+    updatedAt: new Date(),
+  },
+  {
+    id: '3',
+    content: '배당도 괜찮은 편이죠?',
+    authorId: '4',
+    postId: '1',
+    createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
+    updatedAt: new Date(),
+  },
+  {
+    id: '4',
+    content: '네, 배당수익률도 나쁘지 않습니다.',
+    authorId: '2',
+    postId: '1',
+    parentId: '3',
+    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+    updatedAt: new Date(),
+  },
+  {
+    id: '5',
+    content: '정부 발표 자료는 항상 의심해봐야 합니다.',
+    authorId: '3',
+    postId: '2',
+    createdAt: new Date(Date.now() - 16 * 60 * 60 * 1000),
+    updatedAt: new Date(),
+  },
+];
+
 export const mockPosts: Post[] = [
   {
     id: '1',
@@ -427,6 +526,7 @@ export const mockPosts: Post[] = [
     isPopular: true,
     isPinned: false,
     userId: '1',
+    authorId: '2',
     stockId: '6',
     createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
     updatedAt: new Date(),
@@ -445,10 +545,11 @@ export const mockPosts: Post[] = [
     isPopular: false,
     isPinned: false,
     userId: '2',
+    authorId: '3',
     createdAt: new Date(Date.now() - 17 * 60 * 60 * 1000),
     updatedAt: new Date(),
     _count: {
-      comments: 0,
+      comments: 1,
       likes: 0,
     },
   },
