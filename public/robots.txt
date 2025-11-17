@@ -1,0 +1,14 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /api/
+Disallow: /admin/
+
+# Disallow auth routes
+Disallow: /login
+Disallow: /signup
+
+# Sitemap location
+Sitemap: https://rankup.com/sitemap.xml
