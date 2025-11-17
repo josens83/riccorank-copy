@@ -3,6 +3,8 @@
 import "./globals.css";
 import Header from "@/components/Header";
 import SessionProvider from "@/components/SessionProvider";
+import { ToastProvider } from "@/components/Toast";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useThemeStore } from "@/lib/store";
 import { useEffect } from "react";
 
@@ -32,10 +34,14 @@ export default function RootLayout({
           isDarkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'
         }`}
       >
-        <SessionProvider>
-          <Header />
-          {children}
-        </SessionProvider>
+        <ErrorBoundary>
+          <ToastProvider>
+            <SessionProvider>
+              <Header />
+              {children}
+            </SessionProvider>
+          </ToastProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );
