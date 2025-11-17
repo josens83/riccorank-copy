@@ -103,6 +103,21 @@ export interface User {
   updatedAt: Date;
 }
 
+export interface Report {
+  id: string;
+  type: 'post' | 'comment';
+  targetId: string;
+  reporterId: string;
+  reporter?: User;
+  reason: 'spam' | 'harassment' | 'inappropriate' | 'misinformation' | 'other';
+  description?: string;
+  status: 'pending' | 'reviewed' | 'resolved' | 'dismissed';
+  reviewedBy?: string;
+  reviewedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface ThemeStock {
   id: string;
   name: string;
