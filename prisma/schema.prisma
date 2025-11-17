@@ -1,0 +1,164 @@
+// Prisma Schema for RANKUP Platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// User Model
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String?
+  image         String?
+  provider      String?   // google, email
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  posts         Post[]
+  comments      Comment[]
+  likes         Like[]
+  bookmarks     Bookmark[]
+}
+
+// Stock Model
+model Stock {
+  id            String    @id @default(cuid())
+  symbol        String    @unique  // 종목 코드
+  name          String              // 종목명
+  market        String              // KOSPI, KOSDAQ
+  currentPrice  Float
+  change        Float
+  changePercent Float
+  volume        BigInt
+  marketCap     BigInt?             // 시가총액
+  sales         BigInt?             // 매출
+  operatingIncome BigInt?           // 영업이익
+  netIncome     BigInt?             // 순이익
+  per           Float?
+  pbr           Float?
+  score         Float?              // 종합 점수
+  rank          Int?
+  updatedAt     DateTime  @updatedAt
+
+  bookmarks     Bookmark[]
+  posts         Post[]
+}
+
+// News Model
+model News {
+  id            String    @id @default(cuid())
+  title         String
+  content       String
+  summary       String?
+  source        String?
+  url           String?
+  imageUrl      String?
+  isHot         Boolean   @default(false)
+  category      String?
+  tags          String?
+  views         Int       @default(0)
+  publishedAt   DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+}
+
+// Post Model (토론방)
+model Post {
+  id            String    @id @default(cuid())
+  title         String
+  content       String
+  category      String    // all, popular, stock, free, notice
+  tags          String?
+  views         Int       @default(0)
+  isPopular     Boolean   @default(false)
+  isPinned      Boolean   @default(false)
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  stockId       String?
+  stock         Stock?    @relation(fields: [stockId], references: [id])
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  comments      Comment[]
+  likes         Like[]
+}
+
+// Comment Model
+model Comment {
+  id            String    @id @default(cuid())
+  content       String
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  postId        String
+  post          Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  parentId      String?
+  parent        Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies       Comment[] @relation("CommentReplies")
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// Like Model
+model Like {
+  id            String    @id @default(cuid())
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  postId        String
+  post          Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime  @default(now())
+
+  @@unique([userId, postId])
+}
+
+// Bookmark Model (즐겨찾기)
+model Bookmark {
+  id            String    @id @default(cuid())
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  stockId       String
+  stock         Stock     @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime  @default(now())
+
+  @@unique([userId, stockId])
+}
+
+// Theme Stock Model (테마주)
+model ThemeStock {
+  id            String    @id @default(cuid())
+  name          String
+  description   String?
+  stockSymbols  String    // JSON array of stock symbols
+  changePercent Float
+  isHot         Boolean   @default(false)
+  updatedAt     DateTime  @updatedAt
+}
+
+// Market Index Model (시장 지수)
+model MarketIndex {
+  id            String    @id @default(cuid())
+  name          String    @unique
+  symbol        String    @unique
+  value         Float
+  change        Float
+  changePercent Float
+  country       String
+  updatedAt     DateTime  @updatedAt
+}
