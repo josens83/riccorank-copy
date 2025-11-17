@@ -1,46 +1,58 @@
 'use client';
 
 import { useState } from 'react';
-import { useThemeStore, useAuthStore } from '@/lib/store';
-import { useRouter } from 'next/navigation';
+import { useThemeStore } from '@/lib/store';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
 
 export default function LoginPage() {
   const { isDarkMode } = useThemeStore();
-  const { setUser } = useAuthStore();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
 
-    // Simulate login
-    setTimeout(() => {
-      setUser({
-        id: '1',
-        email: email,
-        name: '투자자',
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
       });
+
+      if (result?.error) {
+        setError('이메일 또는 비밀번호가 올바르지 않습니다');
+      } else {
+        router.push(callbackUrl);
+        router.refresh();
+      }
+    } catch (err) {
+      setError('로그인 중 오류가 발생했습니다');
+    } finally {
       setIsLoading(false);
-      router.push('/');
-    }, 1000);
+    }
   };
 
-  const handleGoogleLogin = () => {
-    // Simulate Google login
-    setUser({
-      id: '1',
-      email: 'user@gmail.com',
-      name: 'Google User',
-      provider: 'google',
-    });
-    router.push('/');
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    try {
+      await signIn('google', { callbackUrl });
+    } catch (err) {
+      setError('Google 로그인 중 오류가 발생했습니다');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -72,6 +84,13 @@ export default function LoginPage() {
             로그인
           </h2>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-sm">
+              {error}
+            </div>
+          )}
+
           {/* Login Form */}
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email Input */}
@@ -86,7 +105,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="이메일을 입력하세요"
+                  placeholder="user@example.com"
                   required
                   className={`w-full pl-10 pr-4 py-3 rounded-lg border ${
                     isDarkMode
@@ -112,7 +131,7 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="비밀번호를 입력하세요"
+                  placeholder="비밀번호 입력"
                   required
                   className={`w-full pl-10 pr-12 py-3 rounded-lg border ${
                     isDarkMode
@@ -132,6 +151,9 @@ export default function LoginPage() {
                 >
                   {showPassword ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
                 </button>
+              </div>
+              <div className="text-xs text-gray-500 mt-1">
+                데모: user@example.com / 아무 비밀번호
               </div>
             </div>
 
@@ -173,11 +195,12 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={handleGoogleLogin}
+            disabled={isLoading}
             className={`w-full py-3 rounded-lg border-2 font-semibold flex items-center justify-center space-x-2 ${
               isDarkMode
                 ? 'border-gray-600 text-white hover:bg-gray-700'
                 : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-            } transition-colors`}
+            } transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             <FcGoogle className="w-6 h-6" />
             <span>구글로 간편로그인</span>

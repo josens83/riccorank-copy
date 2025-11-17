@@ -2,53 +2,32 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useThemeStore, useLanguageStore, useAuthStore } from '@/lib/store';
-import { FiSearch, FiMoon, FiSun, FiChevronDown, FiUser } from 'react-icons/fi';
+import { useThemeStore, useLanguageStore } from '@/lib/store';
+import { useSession, signOut } from 'next-auth/react';
+import { FiSearch, FiMoon, FiSun, FiChevronDown, FiUser, FiLogOut } from 'react-icons/fi';
 
 const Header = () => {
   const { isDarkMode, toggleDarkMode } = useThemeStore();
   const { language, setLanguage } = useLanguageStore();
-  const { isLoggedIn, user, logout } = useAuthStore();
+  const { data: session, status } = useSession();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const menuItems = [
-    {
-      label: '홈',
-      href: '/',
-      hasDropdown: false
-    },
+    { label: '홈', href: '/', hasDropdown: false },
     {
       label: '주식',
       href: '/stocklist',
       hasDropdown: true,
       subItems: [
         { label: '주식랭킹순위', href: '/stocklist' },
-        { label: '해외펀드', href: '/funds' },
         { label: '종합스코어 순위', href: '/score' },
-        { label: '금융위원회 공시', href: '/disclosure' },
-        { label: '기관대표 Top100', href: '/institution' },
-        { label: '재무 상장 순위', href: '/financial' },
-        { label: '신규가', href: '/ipo' },
-      ],
-    },
-    {
-      label: '코인',
-      href: '/coin',
-      hasDropdown: true,
-      subItems: [
-        { label: '코인 시세', href: '/coin/price' },
-        { label: '거래소별 시세', href: '/coin/exchange' },
       ],
     },
     {
       label: '뉴스',
       href: '/news',
-      hasDropdown: true,
-      subItems: [
-        { label: '국내 뉴스', href: '/news' },
-        { label: '해외 뉴스', href: '/news/global' },
-      ],
+      hasDropdown: false,
     },
     {
       label: '커뮤니티',
@@ -57,20 +36,6 @@ const Header = () => {
       subItems: [
         { label: '주식 토론방', href: '/stockboard' },
         { label: '자유게시판', href: '/community/free' },
-      ],
-    },
-    {
-      label: '부동산살거래가',
-      href: '/realestate',
-      hasDropdown: false,
-    },
-    {
-      label: '모의투자',
-      href: '/simulation',
-      hasDropdown: true,
-      subItems: [
-        { label: '모의투자 시작', href: '/simulation/start' },
-        { label: '내 포트폴리오', href: '/simulation/portfolio' },
       ],
     },
     {
@@ -91,6 +56,10 @@ const Header = () => {
 
   const handleMouseLeave = () => {
     setActiveDropdown(null);
+  };
+
+  const handleLogout = async () => {
+    await signOut({ redirect: true, callbackUrl: '/' });
   };
 
   return (
@@ -191,38 +160,43 @@ const Header = () => {
                   : 'bg-white border-gray-300 text-gray-700'
               } hover:bg-opacity-80 transition-all flex items-center justify-center`}
             >
-              {language === 'ko' ? (
-                <span className="text-xl">🇰🇷</span>
-              ) : (
-                <span className="text-xl">🇺🇸</span>
-              )}
+              {language === 'ko' ? <span className="text-xl">🇰🇷</span> : <span className="text-xl">🇺🇸</span>}
             </button>
 
             {/* Login/User Menu */}
-            {isLoggedIn && user ? (
+            {status === 'authenticated' && session?.user ? (
               <div className="relative group">
                 <button className="flex items-center space-x-2">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
                   }`}>
-                    <FiUser className="w-5 h-5" />
+                    {session.user.image ? (
+                      <img src={session.user.image} alt="Profile" className="w-8 h-8 rounded-full" />
+                    ) : (
+                      <FiUser className="w-5 h-5" />
+                    )}
                   </div>
+                  <span className={`text-sm font-medium hidden sm:block ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    {session.user.name || session.user.email}
+                  </span>
                 </button>
                 <div className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${
                   isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
                 } border hidden group-hover:block`}>
                   <div className="py-1">
-                    <Link href="/mypage" className={`block px-4 py-2 text-sm ${
+                    <Link href="/mypage" className={`flex items-center px-4 py-2 text-sm ${
                       isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'
                     }`}>
+                      <FiUser className="w-4 h-4 mr-2" />
                       마이페이지
                     </Link>
                     <button
-                      onClick={logout}
-                      className={`w-full text-left px-4 py-2 text-sm ${
+                      onClick={handleLogout}
+                      className={`w-full flex items-center text-left px-4 py-2 text-sm ${
                         isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'
                       }`}
                     >
+                      <FiLogOut className="w-4 h-4 mr-2" />
                       로그아웃
                     </button>
                   </div>

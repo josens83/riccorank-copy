@@ -2,6 +2,7 @@
 
 import "./globals.css";
 import Header from "@/components/Header";
+import SessionProvider from "@/components/SessionProvider";
 import { useThemeStore } from "@/lib/store";
 import { useEffect } from "react";
 
@@ -31,8 +32,10 @@ export default function RootLayout({
           isDarkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'
         }`}
       >
-        <Header />
-        {children}
+        <SessionProvider>
+          <Header />
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );
