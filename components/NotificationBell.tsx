@@ -189,16 +189,16 @@ export default function NotificationBell() {
       {/* Bell Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`relative p-2 rounded-lg transition-colors ${
-          isDarkMode
-            ? 'hover:bg-gray-700 text-gray-300'
-            : 'hover:bg-gray-100 text-gray-600'
-        }`}
+        className="relative p-2 rounded-lg interactive border-glow"
+        style={{
+          background: 'rgba(var(--color-surface), 0.5)',
+          color: 'rgb(var(--color-text-primary))'
+        }}
         aria-label="Notifications"
       >
         <FiBell className="w-5 h-5" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse" style={{ background: 'var(--gradient-primary)' }}>
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -207,26 +207,24 @@ export default function NotificationBell() {
       {/* Dropdown */}
       {isOpen && (
         <div
-          className={`absolute right-0 mt-2 w-96 rounded-lg shadow-2xl border z-50 ${
-            isDarkMode
-              ? 'bg-gray-800 border-gray-700'
-              : 'bg-white border-gray-200'
-          }`}
+          className="absolute right-0 mt-2 w-96 rounded-2xl glass-strong border z-50"
+          style={{
+            borderColor: 'rgba(var(--color-border), 0.2)',
+            boxShadow: 'var(--shadow-2xl)'
+          }}
         >
           {/* Header */}
           <div
-            className={`flex items-center justify-between p-4 border-b ${
-              isDarkMode ? 'border-gray-700' : 'border-gray-200'
-            }`}
+            className="flex items-center justify-between p-4 border-b"
+            style={{ borderColor: 'rgba(var(--color-border), 0.2)' }}
           >
             <h3
-              className={`text-lg font-semibold ${
-                isDarkMode ? 'text-white' : 'text-gray-900'
-              }`}
+              className="text-lg font-semibold"
+              style={{ color: 'rgb(var(--color-text-primary))' }}
             >
               알림{' '}
               {unreadCount > 0 && (
-                <span className="text-sm font-normal text-blue-600">
+                <span className="text-sm font-normal text-gradient">
                   ({unreadCount}개 안읽음)
                 </span>
               )}
@@ -234,7 +232,8 @@ export default function NotificationBell() {
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                className="text-xs font-medium interactive"
+                style={{ color: 'rgb(var(--color-primary))' }}
               >
                 모두 읽음
               </button>
@@ -245,17 +244,15 @@ export default function NotificationBell() {
           <div className="max-h-[400px] overflow-y-auto">
             {isLoading ? (
               <div
-                className={`p-8 text-center text-sm ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}
+                className="p-8 text-center text-sm shimmer"
+                style={{ color: 'rgb(var(--color-text-secondary))' }}
               >
                 로딩 중...
               </div>
             ) : notifications.length === 0 ? (
               <div
-                className={`p-8 text-center text-sm ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}
+                className="p-8 text-center text-sm"
+                style={{ color: 'rgb(var(--color-text-secondary))' }}
               >
                 알림이 없습니다.
               </div>
@@ -263,15 +260,11 @@ export default function NotificationBell() {
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`group border-b last:border-b-0 transition-colors ${
-                    isDarkMode ? 'border-gray-700' : 'border-gray-200'
-                  } ${
-                    !notification.read
-                      ? isDarkMode
-                        ? 'bg-blue-900/10'
-                        : 'bg-blue-50'
-                      : ''
-                  } ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}`}
+                  className="group border-b last:border-b-0 card-hover"
+                  style={{
+                    borderColor: 'rgba(var(--color-border), 0.2)',
+                    background: !notification.read ? 'rgba(var(--color-primary), 0.05)' : 'transparent'
+                  }}
                 >
                   <div className="p-4">
                     <div className="flex items-start space-x-3">
@@ -289,23 +282,20 @@ export default function NotificationBell() {
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <p
-                              className={`text-sm font-medium ${
-                                isDarkMode ? 'text-white' : 'text-gray-900'
-                              }`}
+                              className="text-sm font-medium"
+                              style={{ color: 'rgb(var(--color-text-primary))' }}
                             >
                               {notification.title}
                             </p>
                             <p
-                              className={`text-xs mt-1 ${
-                                isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                              }`}
+                              className="text-xs mt-1"
+                              style={{ color: 'rgb(var(--color-text-secondary))' }}
                             >
                               {notification.message}
                             </p>
                             <p
-                              className={`text-xs mt-1 ${
-                                isDarkMode ? 'text-gray-500' : 'text-gray-500'
-                              }`}
+                              className="text-xs mt-1"
+                              style={{ color: 'rgb(var(--color-text-tertiary))' }}
                             >
                               {getTimeAgo(notification.createdAt)}
                             </p>
@@ -319,11 +309,8 @@ export default function NotificationBell() {
                                   e.stopPropagation();
                                   handleMarkAsRead(notification.id);
                                 }}
-                                className={`p-1.5 rounded hover:bg-opacity-20 transition-colors ${
-                                  isDarkMode
-                                    ? 'hover:bg-blue-400 text-blue-400'
-                                    : 'hover:bg-blue-600 text-blue-600'
-                                }`}
+                                className="p-1.5 rounded-lg interactive"
+                                style={{ color: 'rgb(var(--color-primary))' }}
                                 title="읽음 표시"
                               >
                                 <FiCheck className="w-3.5 h-3.5" />
@@ -334,11 +321,8 @@ export default function NotificationBell() {
                                 e.stopPropagation();
                                 handleDeleteNotification(notification.id);
                               }}
-                              className={`p-1.5 rounded hover:bg-opacity-20 transition-colors ${
-                                isDarkMode
-                                  ? 'hover:bg-red-400 text-red-400'
-                                  : 'hover:bg-red-600 text-red-600'
-                              }`}
+                              className="p-1.5 rounded-lg interactive"
+                              style={{ color: 'rgb(220, 38, 38)' }}
                               title="삭제"
                             >
                               <FiTrash2 className="w-3.5 h-3.5" />
@@ -356,7 +340,7 @@ export default function NotificationBell() {
                                 handleMarkAsRead(notification.id);
                               }
                             }}
-                            className="text-xs text-blue-600 hover:text-blue-700 font-medium mt-2 inline-block"
+                            className="text-xs font-medium mt-2 inline-block interactive text-gradient"
                           >
                             자세히 보기 →
                           </Link>
@@ -372,14 +356,13 @@ export default function NotificationBell() {
           {/* Footer */}
           {notifications.length > 0 && (
             <div
-              className={`p-3 border-t text-center ${
-                isDarkMode ? 'border-gray-700' : 'border-gray-200'
-              }`}
+              className="p-3 border-t text-center"
+              style={{ borderColor: 'rgba(var(--color-border), 0.2)' }}
             >
               <Link
                 href="/notifications"
                 onClick={() => setIsOpen(false)}
-                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="text-sm font-medium interactive text-gradient"
               >
                 모든 알림 보기
               </Link>
