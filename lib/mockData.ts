@@ -1,6 +1,80 @@
 // Mock Data for Development
 
-import { Stock, MarketIndex, News, Post, PopularSearch, ThemeStock, StockSentiment, User, Comment } from './types';
+import {
+  Stock,
+  MarketIndex,
+  News,
+  Post,
+  PopularSearch,
+  ThemeStock,
+  StockSentiment,
+  User,
+  Comment,
+  Notification,
+} from './types';
+
+/**
+ * Mock Users for Development
+ * Used for authentication and authorization testing
+ */
+export const mockUsers: User[] = [
+  {
+    id: '1',
+    email: 'admin@rankup.com',
+    name: '관리자',
+    role: 'admin',
+    suspended: false,
+    emailVerified: true,
+    provider: 'credentials',
+    createdAt: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // 1 year ago
+    updatedAt: new Date(),
+  },
+  {
+    id: '2',
+    email: 'user@test.com',
+    name: '테스트 유저',
+    role: 'user',
+    suspended: false,
+    emailVerified: true,
+    provider: 'credentials',
+    createdAt: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months ago
+    updatedAt: new Date(),
+  },
+  {
+    id: '3',
+    email: 'john@example.com',
+    name: 'John Doe',
+    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=john',
+    role: 'user',
+    suspended: false,
+    emailVerified: true,
+    provider: 'google',
+    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
+    updatedAt: new Date(),
+  },
+  {
+    id: '4',
+    email: 'suspended@test.com',
+    name: '정지된 사용자',
+    role: 'user',
+    suspended: true,
+    emailVerified: true,
+    provider: 'credentials',
+    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 2 months ago
+    updatedAt: new Date(),
+  },
+  {
+    id: '5',
+    email: 'unverified@test.com',
+    name: '미인증 사용자',
+    role: 'user',
+    suspended: false,
+    emailVerified: false,
+    provider: 'credentials',
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 week ago
+    updatedAt: new Date(),
+  },
+];
 
 export const mockPopularSearches: PopularSearch[] = [
   { rank: 1, symbol: '005930', name: '삼성SDI', code: '006400', change: 3000, changePercent: 0.95 },
@@ -551,6 +625,90 @@ export const mockPosts: Post[] = [
     _count: {
       comments: 1,
       likes: 0,
+    },
+  },
+];
+
+/**
+ * Mock Notifications for Development
+ * Used for in-app notification system testing
+ */
+export const mockNotifications: Notification[] = [
+  {
+    id: '1',
+    userId: '2', // user@test.com
+    type: 'comment',
+    title: '새로운 댓글',
+    message: '관리자님이 회원님의 게시글에 댓글을 남겼습니다.',
+    link: '/community/posts/1',
+    read: false,
+    createdAt: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
+    data: {
+      postId: '1',
+      actorName: '관리자',
+    },
+  },
+  {
+    id: '2',
+    userId: '2',
+    type: 'like',
+    title: '좋아요 알림',
+    message: 'John Doe님이 회원님의 게시글을 좋아합니다.',
+    link: '/community/posts/1',
+    read: false,
+    createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000), // 1 hour ago
+    data: {
+      postId: '1',
+      actorName: 'John Doe',
+      actorImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=john',
+    },
+  },
+  {
+    id: '3',
+    userId: '2',
+    type: 'reply',
+    title: '새로운 답글',
+    message: '관리자님이 회원님의 댓글에 답글을 남겼습니다.',
+    link: '/community/posts/1#comment-2',
+    read: true,
+    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
+    data: {
+      commentId: '1',
+      actorName: '관리자',
+    },
+  },
+  {
+    id: '4',
+    userId: '2',
+    type: 'system',
+    title: '시스템 공지',
+    message: '새로운 기능이 추가되었습니다! AI 기반 종목 추천 기능을 확인해보세요.',
+    link: '/subscribe',
+    read: true,
+    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
+  },
+  {
+    id: '5',
+    userId: '2',
+    type: 'subscription',
+    title: '구독 갱신 알림',
+    message: '프로 플랜 구독이 7일 후 만료됩니다. 갱신하시겠습니까?',
+    link: '/subscribe',
+    read: true,
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
+  },
+  {
+    id: '6',
+    userId: '2',
+    type: 'mention',
+    title: '회원님이 언급되었습니다',
+    message: '관리자님이 게시글에서 회원님을 언급했습니다.',
+    link: '/community/posts/1',
+    read: true,
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+    data: {
+      postId: '1',
+      actorName: '관리자',
     },
   },
 ];

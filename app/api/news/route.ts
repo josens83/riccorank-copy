@@ -2,6 +2,8 @@ import { NextRequest } from 'next/server';
 import { handleApiError, successResponse, paginateArray } from '@/lib/api-utils';
 import { getNewsSchema } from '@/lib/validations';
 import { mockNews } from '@/lib/mockData';
+import { getFinancialNews, getNewsByCategory, searchNews } from '@/lib/newsApi';
+import { getCachedData, createCacheKey } from '@/lib/cache';
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,7 +17,38 @@ export async function GET(request: NextRequest) {
       limit: searchParams.get('limit'),
     });
 
-    let news = [...mockNews];
+    // 실제 API에서 뉴스 가져오기 (캐시 사용, 15분 TTL)
+    const cacheKey = createCacheKey('news', {
+      category: params.category || 'all',
+      search: params.search || 'none'
+    });
+
+    let news = await getCachedData(
+      cacheKey,
+      async () => {
+        try {
+          // 검색어가 있으면 검색
+          if (params.search) {
+            const searchResults = await searchNews(params.search, 50);
+            return searchResults.length > 0 ? searchResults : mockNews;
+          }
+
+          // 카테고리가 있으면 카테고리별 뉴스
+          if (params.category) {
+            const categoryNews = await getNewsByCategory(params.category, 50);
+            return categoryNews.length > 0 ? categoryNews : mockNews;
+          }
+
+          // 기본: 금융 뉴스
+          const financialNews = await getFinancialNews(50);
+          return financialNews.length > 0 ? financialNews : mockNews;
+        } catch (error) {
+          console.error('News API failed, using mock data:', error);
+          return mockNews;
+        }
+      },
+      15 * 60 * 1000 // 15분 캐시
+    );
 
     // Filter by category
     if (params.category) {

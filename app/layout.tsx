@@ -8,6 +8,13 @@ import { ToastProvider } from "@/components/Toast";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useThemeStore } from "@/lib/store";
 import { useEffect } from "react";
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export default function RootLayout({
   children,
@@ -25,15 +32,17 @@ export default function RootLayout({
   }, [isDarkMode]);
 
   return (
-    <html lang="ko">
+    <html lang="ko" className={inter.variable}>
       <head>
         <title>RANKUP - 종합 금융 정보 플랫폼</title>
         <meta name="description" content="실시간 주식, 코인, 뉴스 정보를 한 곳에서" />
       </head>
       <body
-        className={`font-sans antialiased ${
-          isDarkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'
-        }`}
+        className={`antialiased ${inter.className}`}
+        style={{
+          background: isDarkMode ? 'rgb(var(--color-bg))' : 'rgb(var(--color-bg))',
+          color: isDarkMode ? 'rgb(var(--color-text-primary))' : 'rgb(var(--color-text-primary))'
+        }}
       >
         <ErrorBoundary>
           <ToastProvider>

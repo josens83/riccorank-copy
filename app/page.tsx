@@ -1,17 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useThemeStore } from '@/lib/store';
-import PopularStocksSidebar from '@/components/PopularStocksSidebar';
-import LiveNewsSidebar from '@/components/LiveNewsSidebar';
 import { mockMarketIndices, mockThemeStocks, mockUpLimitStocks } from '@/lib/mockData';
-import { FiTrendingUp, FiTrendingDown, FiFlame, FiArrowUp } from 'react-icons/fi';
+import {
+  FiTrendingUp,
+  FiTrendingDown,
+  FiFlame,
+  FiArrowUp,
+  FiBarChart2,
+  FiPieChart,
+  FiActivity,
+  FiZap,
+  FiArrowRight,
+  FiGlobe,
+} from 'react-icons/fi';
 import Link from 'next/link';
 
 export default function Home() {
   const { isDarkMode } = useThemeStore();
-  const [selectedTab, setSelectedTab] = useState<'realtime' | 'global'>('realtime');
-  const [selectedSubTab, setSelectedSubTab] = useState('글로벌 주요 지수');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const formatNumber = (num: number) => {
     return num.toLocaleString('ko-KR', {
@@ -23,90 +35,172 @@ export default function Home() {
   const formatChange = (change: number, percent: number) => {
     const isPositive = change >= 0;
     const sign = isPositive ? '+' : '';
-    const icon = isPositive ? <FiTrendingUp className="w-3 h-3" /> : <FiTrendingDown className="w-3 h-3" />;
+    const icon = isPositive ? (
+      <FiTrendingUp className="w-3 h-3" />
+    ) : (
+      <FiTrendingDown className="w-3 h-3" />
+    );
     const color = isPositive ? 'text-red-500' : 'text-blue-500';
 
     return (
       <div className={`flex items-center space-x-1 ${color}`}>
         {icon}
         <span className="text-sm font-semibold">
-          {sign}{percent.toFixed(2)}%
+          {sign}
+          {percent.toFixed(2)}%
         </span>
       </div>
     );
   };
 
-  return (
-    <main className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      <div className="max-w-[1920px] mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Sidebar */}
-          <aside className="lg:col-span-2">
-            <PopularStocksSidebar />
-          </aside>
+  if (!mounted) return null;
 
-          {/* Main Content */}
-          <div className="lg:col-span-7">
-            {/* Market Indices Section */}
-            <div className={`rounded-lg border ${
-              isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-            } p-6 mb-6`}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                  <FiTrendingUp className="inline w-6 h-6 mr-2 text-blue-600" />
-                  주요 시세
-                </h2>
-                <div className="flex space-x-2">
-                  <button className="px-3 py-1 text-xs rounded-full bg-blue-600 text-white">
-                    ● 실시간
-                  </button>
-                  <button className="px-4 py-1 text-sm rounded-full bg-blue-600 text-white font-medium">
-                    글로벌 주요 지수
-                  </button>
-                  <button className={`px-3 py-1 text-sm rounded-full ${
-                    isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
-                  }`}>
-                    주요 선물 지수
-                  </button>
-                  <button className={`px-3 py-1 text-sm rounded-full ${
-                    isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
-                  }`}>
-                    글로벌 멀티에셋
-                  </button>
+  return (
+    <main className="min-h-screen relative overflow-hidden">
+      {/* Hero Section with Linear Style Gradients */}
+      <div className="relative">
+        {/* Background Gradient Blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div
+            className="absolute top-0 -left-4 w-96 h-96 rounded-full blur-3xl opacity-20"
+            style={{
+              background: 'radial-gradient(circle, rgb(59, 130, 246) 0%, transparent 70%)',
+            }}
+          />
+          <div
+            className="absolute top-20 right-10 w-96 h-96 rounded-full blur-3xl opacity-20"
+            style={{
+              background: 'radial-gradient(circle, rgb(168, 85, 247) 0%, transparent 70%)',
+            }}
+          />
+          <div
+            className="absolute bottom-0 left-1/2 w-96 h-96 rounded-full blur-3xl opacity-10"
+            style={{
+              background: 'radial-gradient(circle, rgb(236, 72, 153) 0%, transparent 70%)',
+            }}
+          />
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+          <div className="text-center mb-12 reveal active">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6 border-glow">
+              <FiZap className="w-4 h-4 text-gradient" />
+              <span className="text-sm font-medium text-gradient">
+                AI 기반 실시간 투자 플랫폼
+              </span>
+            </div>
+
+            <h1
+              className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight"
+              style={{ color: 'rgb(var(--color-text-primary))' }}
+            >
+              투자의 새로운{' '}
+              <span className="text-gradient">기준</span>
+            </h1>
+
+            <p
+              className="text-lg md:text-xl mb-8 max-w-2xl mx-auto"
+              style={{ color: 'rgb(var(--color-text-secondary))' }}
+            >
+              실시간 시장 데이터, AI 분석, 커뮤니티가 하나로.
+              <br />
+              스마트한 투자 의사결정을 위한 모든 것.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/stocklist"
+                className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold interactive glow-hover"
+                style={{
+                  background: 'var(--gradient-primary)',
+                  color: 'white',
+                }}
+              >
+                투자 시작하기
+                <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+
+              <Link
+                href="/subscribe"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold glass border-glow interactive"
+                style={{ color: 'rgb(var(--color-text-primary))' }}
+              >
+                <FiBarChart2 className="w-5 h-5" />
+                프리미엄 플랜
+              </Link>
+            </div>
+          </div>
+
+          {/* Bento Grid - Feature Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+            {/* Large Feature Card - Market Indices */}
+            <div className="md:col-span-2 lg:row-span-2 glass-strong rounded-2xl p-6 border-glow card-hover">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-primary">
+                    <FiGlobe className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h2
+                      className="text-xl font-bold"
+                      style={{ color: 'rgb(var(--color-text-primary))' }}
+                    >
+                      글로벌 시장 현황
+                    </h2>
+                    <p
+                      className="text-sm"
+                      style={{ color: 'rgb(var(--color-text-secondary))' }}
+                    >
+                      실시간 업데이트
+                    </p>
+                  </div>
                 </div>
+                <span className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-primary text-white">
+                  <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                  LIVE
+                </span>
               </div>
 
               {/* Market Indices Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {mockMarketIndices.map((index) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {mockMarketIndices.slice(0, 4).map((index) => (
                   <div
                     key={index.id}
-                    className={`p-4 rounded-lg border ${
-                      isDarkMode ? 'border-gray-700 hover:bg-gray-700/50' : 'border-gray-200 hover:bg-gray-50'
-                    } transition-colors cursor-pointer`}
+                    className="p-4 rounded-xl interactive"
+                    style={{
+                      background: isDarkMode
+                        ? 'rgba(var(--color-surface), 0.5)'
+                        : 'rgba(var(--color-bg-secondary), 1)',
+                      border: '1px solid rgba(var(--color-border), 0.5)',
+                    }}
                   >
-                    <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-start justify-between mb-3">
                       <div>
-                        <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} mb-1`}>
+                        <div
+                          className="text-xs mb-1"
+                          style={{ color: 'rgb(var(--color-text-tertiary))' }}
+                        >
                           {index.country === '국내' ? '🇰🇷' : '🇺🇸'} {index.country}
                         </div>
-                        <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        <div
+                          className="font-semibold"
+                          style={{ color: 'rgb(var(--color-text-primary))' }}
+                        >
                           {index.name}
                         </div>
                       </div>
                     </div>
                     <div className="flex items-end justify-between">
                       <div>
-                        <div className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        <div
+                          className="text-2xl font-bold"
+                          style={{ color: 'rgb(var(--color-text-primary))' }}
+                        >
                           {formatNumber(index.value)}
                         </div>
-                        <div className="flex items-center space-x-2 mt-1">
+                        <div className="flex items-center gap-2 mt-1">
                           {formatChange(index.change, index.changePercent)}
-                          <span className={`text-xs ${
-                            index.change >= 0 ? 'text-red-500' : 'text-blue-500'
-                          }`}>
-                            {index.change >= 0 ? '+' : ''}{formatNumber(index.change)}
-                          </span>
                         </div>
                       </div>
                     </div>
@@ -115,118 +209,285 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Theme Stocks Section */}
-            <div className={`rounded-lg border ${
-              isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-            } p-6 mb-6`}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} flex items-center`}>
-                  <FiFlame className="w-5 h-5 mr-2 text-orange-500" />
-                  오늘의 테마주
-                  <span className="ml-2 px-2 py-0.5 bg-orange-500 text-white text-xs font-bold rounded">
-                    HOT
-                  </span>
-                </h2>
-                <Link href="/themes" className={`text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'} hover:underline`}>
-                  전체보기 →
-                </Link>
+            {/* Theme Stocks Card */}
+            <div className="glass-strong rounded-2xl p-6 border-glow card-hover">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-orange-500 to-red-500">
+                  <FiFlame className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3
+                    className="font-bold"
+                    style={{ color: 'rgb(var(--color-text-primary))' }}
+                  >
+                    오늘의 테마
+                  </h3>
+                  <p
+                    className="text-xs"
+                    style={{ color: 'rgb(var(--color-text-secondary))' }}
+                  >
+                    HOT 섹터
+                  </p>
+                </div>
               </div>
 
-              <div className="text-sm text-gray-500 mb-4">
-                시장을 주도하는 테마별 금융주
+              <div className="space-y-2">
+                {mockThemeStocks.slice(0, 3).map((theme) => (
+                  <div
+                    key={theme.id}
+                    className="p-3 rounded-lg interactive"
+                    style={{
+                      background: isDarkMode
+                        ? 'rgba(var(--color-surface), 0.5)'
+                        : 'rgba(var(--color-bg-secondary), 1)',
+                    }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="text-sm font-medium truncate"
+                        style={{ color: 'rgb(var(--color-text-primary))' }}
+                      >
+                        {theme.name}
+                      </span>
+                      <span
+                        className={`text-sm font-bold ${
+                          theme.changePercent >= 0 ? 'text-red-500' : 'text-blue-500'
+                        }`}
+                      >
+                        +{theme.changePercent.toFixed(2)}%
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <Link
+                href="/themes"
+                className="mt-4 flex items-center gap-2 text-sm font-medium group"
+                style={{ color: 'rgb(var(--color-primary))' }}
+              >
+                전체 테마 보기
+                <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            {/* Stats Card */}
+            <div className="glass-strong rounded-2xl p-6 border-glow card-hover">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-green-500 to-emerald-500">
+                  <FiActivity className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3
+                    className="font-bold"
+                    style={{ color: 'rgb(var(--color-text-primary))' }}
+                  >
+                    시장 동향
+                  </h3>
+                  <p
+                    className="text-xs"
+                    style={{ color: 'rgb(var(--color-text-secondary))' }}
+                  >
+                    실시간 분석
+                  </p>
+                </div>
               </div>
 
               <div className="space-y-3">
-                {mockThemeStocks.map((theme) => (
+                <div
+                  className="p-3 rounded-lg"
+                  style={{
+                    background: isDarkMode
+                      ? 'rgba(var(--color-surface), 0.5)'
+                      : 'rgba(var(--color-bg-secondary), 1)',
+                  }}
+                >
                   <div
-                    key={theme.id}
-                    className={`p-4 rounded-lg border ${
-                      isDarkMode ? 'border-gray-700 hover:bg-gray-700/50' : 'border-gray-200 hover:bg-gray-50'
-                    } transition-colors cursor-pointer`}
+                    className="text-xs mb-1"
+                    style={{ color: 'rgb(var(--color-text-tertiary))' }}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                          {theme.name}
-                        </div>
-                      </div>
-                      <div className={`flex items-center space-x-2 px-3 py-1 rounded-full ${
-                        theme.changePercent >= 0
-                          ? isDarkMode ? 'bg-red-900/30 text-red-400' : 'bg-red-50 text-red-600'
-                          : isDarkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-50 text-blue-600'
-                      }`}>
-                        <FiTrendingUp className="w-4 h-4" />
-                        <span className="font-bold">{theme.changePercent.toFixed(2)}%</span>
-                      </div>
-                    </div>
+                    상승 종목
                   </div>
-                ))}
+                  <div
+                    className="text-2xl font-bold text-red-500"
+                  >
+                    342
+                  </div>
+                </div>
+
+                <div
+                  className="p-3 rounded-lg"
+                  style={{
+                    background: isDarkMode
+                      ? 'rgba(var(--color-surface), 0.5)'
+                      : 'rgba(var(--color-bg-secondary), 1)',
+                  }}
+                >
+                  <div
+                    className="text-xs mb-1"
+                    style={{ color: 'rgb(var(--color-text-tertiary))' }}
+                  >
+                    하락 종목
+                  </div>
+                  <div className="text-2xl font-bold text-blue-500">
+                    128
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Up Limit Stocks Section */}
-            <div className={`rounded-lg border ${
-              isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-            } p-6`}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} flex items-center`}>
-                  <FiArrowUp className="w-5 h-5 mr-2 text-red-500" />
-                  상한가 종목
-                  <span className="ml-2 px-2 py-0.5 bg-red-500 text-white text-xs font-bold rounded">
-                    +30%
-                  </span>
-                </h2>
-                <Link href="/uplimit" className={`text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'} hover:underline`}>
-                  전체보기 →
-                </Link>
+            {/* Up Limit Card */}
+            <div className="glass-strong rounded-2xl p-6 border-glow card-hover">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-red-500 to-pink-500">
+                  <FiArrowUp className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3
+                    className="font-bold"
+                    style={{ color: 'rgb(var(--color-text-primary))' }}
+                  >
+                    상한가
+                  </h3>
+                  <p
+                    className="text-xs"
+                    style={{ color: 'rgb(var(--color-text-secondary))' }}
+                  >
+                    급등 종목
+                  </p>
+                </div>
               </div>
 
-              <div className="text-sm text-gray-500 mb-4">
-                오늘 상한가를 기록한 종목 현황
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {mockUpLimitStocks.map((stock, index) => (
+              <div className="space-y-2">
+                {mockUpLimitStocks.slice(0, 3).map((stock, index) => (
                   <div
                     key={index}
-                    className={`p-4 rounded-lg border ${
-                      isDarkMode ? 'border-gray-700 hover:bg-gray-700/50' : 'border-gray-200 hover:bg-gray-50'
-                    } transition-colors cursor-pointer`}
+                    className="p-3 rounded-lg interactive"
+                    style={{
+                      background: isDarkMode
+                        ? 'rgba(var(--color-surface), 0.5)'
+                        : 'rgba(var(--color-bg-secondary), 1)',
+                    }}
                   >
                     <div className="flex items-center justify-between">
-                      <div>
-                        <div className={`font-semibold mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      <div className="flex-1 min-w-0">
+                        <div
+                          className="text-sm font-medium truncate"
+                          style={{ color: 'rgb(var(--color-text-primary))' }}
+                        >
                           {stock.name}
                         </div>
-                        <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <div
+                          className="text-xs"
+                          style={{ color: 'rgb(var(--color-text-tertiary))' }}
+                        >
                           {stock.code}
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        <div
+                          className="text-sm font-bold"
+                          style={{ color: 'rgb(var(--color-text-primary))' }}
+                        >
                           {stock.price.toLocaleString()}
                         </div>
-                        <div className="flex items-center justify-end space-x-1 text-red-500">
-                          <FiTrendingUp className="w-3 h-3" />
-                          <span className="text-xs font-semibold">
-                            +{stock.changePercent.toFixed(2)}%
-                          </span>
-                        </div>
-                        <div className="text-xs text-red-500">
-                          +{stock.change.toLocaleString()}
+                        <div className="text-xs font-semibold text-red-500">
+                          +{stock.changePercent.toFixed(1)}%
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
+
+              <Link
+                href="/uplimit"
+                className="mt-4 flex items-center gap-2 text-sm font-medium group"
+                style={{ color: 'rgb(var(--color-primary))' }}
+              >
+                전체 목록 보기
+                <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            {/* AI Analysis Card */}
+            <div className="md:col-span-2 glass-strong rounded-2xl p-6 border-glow card-hover">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-purple-500 to-indigo-500">
+                  <FiPieChart className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3
+                    className="text-lg font-bold"
+                    style={{ color: 'rgb(var(--color-text-primary))' }}
+                  >
+                    AI 기반 투자 분석
+                  </h3>
+                  <p
+                    className="text-sm"
+                    style={{ color: 'rgb(var(--color-text-secondary))' }}
+                  >
+                    프리미엄 기능
+                  </p>
+                </div>
+              </div>
+
+              <div
+                className="p-4 rounded-xl mb-4"
+                style={{
+                  background: isDarkMode
+                    ? 'rgba(var(--color-surface), 0.5)'
+                    : 'rgba(var(--color-bg-secondary), 1)',
+                }}
+              >
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: 'rgb(var(--color-text-secondary))' }}
+                >
+                  머신러닝 기반의 실시간 시장 분석으로 최적의 투자 타이밍을 찾아드립니다.
+                  과거 데이터와 현재 트렌드를 분석하여 종목 추천과 리스크 관리를 제공합니다.
+                </p>
+              </div>
+
+              <Link
+                href="/subscribe"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold interactive"
+                style={{
+                  background: 'var(--gradient-primary)',
+                  color: 'white',
+                }}
+              >
+                프리미엄 플랜 시작하기
+                <FiArrowRight className="w-5 h-5" />
+              </Link>
             </div>
           </div>
 
-          {/* Right Sidebar */}
-          <aside className="lg:col-span-3">
-            <LiveNewsSidebar />
-          </aside>
+          {/* Quick Links */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { icon: FiBarChart2, label: '주식 랭킹', href: '/stocklist', color: 'from-blue-500 to-cyan-500' },
+              { icon: FiFlame, label: '커뮤니티', href: '/stockboard', color: 'from-orange-500 to-red-500' },
+              { icon: FiActivity, label: '뉴스', href: '/news', color: 'from-green-500 to-emerald-500' },
+              { icon: FiPieChart, label: '종합스코어', href: '/score', color: 'from-purple-500 to-indigo-500' },
+            ].map((link, index) => (
+              <Link
+                key={index}
+                href={link.href}
+                className="glass-strong rounded-xl p-4 border-glow interactive text-center group"
+              >
+                <div className={`w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center bg-gradient-to-br ${link.color}`}>
+                  <link.icon className="w-6 h-6 text-white" />
+                </div>
+                <div
+                  className="font-semibold text-sm group-hover:text-gradient transition-all"
+                  style={{ color: 'rgb(var(--color-text-primary))' }}
+                >
+                  {link.label}
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </main>

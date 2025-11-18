@@ -99,6 +99,7 @@ export interface User {
   provider?: string;
   role: 'user' | 'admin';
   suspended: boolean;
+  emailVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -147,4 +148,22 @@ export interface StockSentiment {
   downPercent: number;
   neutralCount: number;
   neutralPercent: number;
+}
+
+export interface Notification {
+  id: string;
+  userId: string;
+  type: 'comment' | 'like' | 'reply' | 'mention' | 'system' | 'subscription' | 'report';
+  title: string;
+  message: string;
+  link?: string;
+  read: boolean;
+  createdAt: Date;
+  data?: {
+    postId?: string;
+    commentId?: string;
+    replyId?: string;
+    actorName?: string;
+    actorImage?: string;
+  };
 }

@@ -161,41 +161,42 @@ export default function GlobalSearch() {
             }
           }}
           placeholder="종목, 게시글, 뉴스 검색..."
-          className={`w-full pl-10 pr-10 py-2 rounded-lg border ${
-            isDarkMode
-              ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400'
-              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-          } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          className="w-full pl-10 pr-10 py-2 rounded-xl border border-glow focus:outline-none"
+          style={{
+            background: 'rgba(var(--color-surface), 0.5)',
+            borderColor: 'rgba(var(--color-border), 0.3)',
+            color: 'rgb(var(--color-text-primary))'
+          }}
         />
-        <FiSearch className={`absolute left-3 top-3 w-4 h-4 ${
-          isDarkMode ? 'text-gray-400' : 'text-gray-500'
-        }`} />
+        <FiSearch className="absolute left-3 top-3 w-4 h-4" style={{ color: 'rgb(var(--color-text-secondary))' }} />
         {query && (
           <button
             onClick={() => setQuery('')}
-            className={`absolute right-3 top-2.5 p-0.5 rounded-full ${
-              isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-            }`}
+            className="absolute right-3 top-2.5 p-0.5 rounded-full interactive"
           >
-            <FiX className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+            <FiX className="w-4 h-4" style={{ color: 'rgb(var(--color-text-secondary))' }} />
           </button>
         )}
       </div>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className={`absolute top-full left-0 right-0 mt-2 rounded-lg border shadow-xl z-50 max-h-96 overflow-y-auto ${
-          isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-        }`}>
+        <div
+          className="absolute top-full left-0 right-0 mt-2 rounded-2xl glass-strong border z-50 max-h-96 overflow-y-auto"
+          style={{
+            borderColor: 'rgba(var(--color-border), 0.2)',
+            boxShadow: 'var(--shadow-2xl)'
+          }}
+        >
           {query.length >= 2 ? (
             // Suggestions
             <>
               {isLoading ? (
-                <div className={`p-4 text-center text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                <div className="p-4 text-center text-sm shimmer" style={{ color: 'rgb(var(--color-text-secondary))' }}>
                   검색 중...
                 </div>
               ) : suggestions.length === 0 ? (
-                <div className={`p-4 text-center text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                <div className="p-4 text-center text-sm" style={{ color: 'rgb(var(--color-text-secondary))' }}>
                   검색 결과가 없습니다
                 </div>
               ) : (
@@ -204,24 +205,20 @@ export default function GlobalSearch() {
                     <button
                       key={`${suggestion.type}-${suggestion.id}-${index}`}
                       onClick={() => handleSuggestionClick(suggestion)}
-                      className={`w-full px-4 py-3 flex items-center space-x-3 ${
-                        isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                      } transition-colors`}
+                      className="w-full px-4 py-3 flex items-center space-x-3 interactive rounded-lg mx-1"
                     >
-                      <div className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                      <div style={{ color: 'rgb(var(--color-text-secondary))' }}>
                         {getSuggestionIcon(suggestion.type)}
                       </div>
                       <div className="flex-1 text-left">
                         <div className="flex items-center space-x-2 mb-1">
                           {getSuggestionBadge(suggestion.type)}
-                          <span className={`text-sm font-medium ${
-                            isDarkMode ? 'text-white' : 'text-gray-900'
-                          }`}>
+                          <span className="text-sm font-medium" style={{ color: 'rgb(var(--color-text-primary))' }}>
                             {suggestion.title}
                           </span>
                         </div>
                         {suggestion.subtitle && (
-                          <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                          <div className="text-xs" style={{ color: 'rgb(var(--color-text-tertiary))' }}>
                             {suggestion.subtitle}
                           </div>
                         )}
@@ -231,14 +228,11 @@ export default function GlobalSearch() {
                 </div>
               )}
               {suggestions.length > 0 && (
-                <div className={`border-t p-2 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                <div className="border-t p-2" style={{ borderColor: 'rgba(var(--color-border), 0.2)' }}>
                   <button
                     onClick={() => handleSearch(query)}
-                    className={`w-full px-4 py-2 text-sm text-center rounded-md ${
-                      isDarkMode
-                        ? 'bg-blue-600 text-white hover:bg-blue-700'
-                        : 'bg-blue-600 text-white hover:bg-blue-700'
-                    } transition-colors`}
+                    className="w-full px-4 py-2 text-sm text-center rounded-xl text-white glow-hover interactive"
+                    style={{ background: 'var(--gradient-primary)' }}
                   >
                     "{query}" 전체 검색 결과 보기
                   </button>
@@ -249,18 +243,19 @@ export default function GlobalSearch() {
             // Search History
             <>
               {searchHistory.length === 0 ? (
-                <div className={`p-4 text-center text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                <div className="p-4 text-center text-sm" style={{ color: 'rgb(var(--color-text-secondary))' }}>
                   최근 검색 기록이 없습니다
                 </div>
               ) : (
                 <div className="py-2">
                   <div className="flex items-center justify-between px-4 py-2">
-                    <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <span className="text-xs font-medium" style={{ color: 'rgb(var(--color-text-secondary))' }}>
                       최근 검색
                     </span>
                     <button
                       onClick={clearHistory}
-                      className={`text-xs ${isDarkMode ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`}
+                      className="text-xs interactive"
+                      style={{ color: 'rgb(var(--color-text-secondary))' }}
                     >
                       전체 삭제
                     </button>
@@ -272,14 +267,10 @@ export default function GlobalSearch() {
                         setQuery(historyItem);
                         handleSearch(historyItem);
                       }}
-                      className={`w-full px-4 py-3 flex items-center space-x-3 ${
-                        isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
-                      } transition-colors`}
+                      className="w-full px-4 py-3 flex items-center space-x-3 interactive rounded-lg mx-1"
                     >
-                      <FiClock className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-                      <span className={`flex-1 text-left text-sm ${
-                        isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                      }`}>
+                      <FiClock className="w-4 h-4" style={{ color: 'rgb(var(--color-text-secondary))' }} />
+                      <span className="flex-1 text-left text-sm" style={{ color: 'rgb(var(--color-text-primary))' }}>
                         {historyItem}
                       </span>
                       <button
@@ -289,11 +280,9 @@ export default function GlobalSearch() {
                           setSearchHistory(newHistory);
                           localStorage.setItem('searchHistory', JSON.stringify(newHistory));
                         }}
-                        className={`p-1 rounded-full ${
-                          isDarkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-200'
-                        }`}
+                        className="p-1 rounded-full interactive"
                       >
-                        <FiX className={`w-3 h-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                        <FiX className="w-3 h-3" style={{ color: 'rgb(var(--color-text-secondary))' }} />
                       </button>
                     </button>
                   ))}

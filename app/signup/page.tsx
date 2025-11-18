@@ -57,7 +57,7 @@ export default function SignupPage() {
       }
 
       // Redirect to login after successful signup
-      alert('회원가입이 완료되었습니다! 로그인해주세요.');
+      alert('회원가입이 완료되었습니다! 이메일을 확인하여 계정을 인증해주세요.');
       router.push('/login');
     } catch (err: any) {
       setError(err.message || '회원가입에 실패했습니다');
