@@ -5,9 +5,9 @@ import { useState } from 'react';
 import { useThemeStore, useLanguageStore } from '@/lib/store';
 import { useSession, signOut } from 'next-auth/react';
 import { FiSearch, FiMoon, FiSun, FiChevronDown, FiUser, FiLogOut } from 'react-icons/fi';
-import GlobalSearch from './GlobalSearch';
+import GlobalSearch from '@/components/features/GlobalSearch';
 import MobileMenu from './MobileMenu';
-import NotificationBell from './NotificationBell';
+import NotificationBell from '@/components/features/NotificationBell';
 
 const Header = () => {
   const { isDarkMode, toggleDarkMode } = useThemeStore();

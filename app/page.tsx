@@ -6,7 +6,7 @@ import { mockMarketIndices, mockThemeStocks, mockUpLimitStocks } from '@/lib/dat
 import {
   FiTrendingUp,
   FiTrendingDown,
-  FiFlame,
+  FiMessageSquare,
   FiArrowUp,
   FiBarChart2,
   FiPieChart,
@@ -213,7 +213,7 @@ export default function Home() {
             <div className="glass-strong rounded-2xl p-6 border-glow card-hover">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-orange-500 to-red-500">
-                  <FiFlame className="w-5 h-5 text-white" />
+                  <FiMessageSquare className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <h3
@@ -467,7 +467,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { icon: FiBarChart2, label: '주식 랭킹', href: '/stocklist', color: 'from-blue-500 to-cyan-500' },
-              { icon: FiFlame, label: '커뮤니티', href: '/stockboard', color: 'from-orange-500 to-red-500' },
+              { icon: FiMessageSquare, label: '커뮤니티', href: '/stockboard', color: 'from-orange-500 to-red-500' },
               { icon: FiActivity, label: '뉴스', href: '/news', color: 'from-green-500 to-emerald-500' },
               { icon: FiPieChart, label: '종합스코어', href: '/score', color: 'from-purple-500 to-indigo-500' },
             ].map((link, index) => (

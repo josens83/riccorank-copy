@@ -1,11 +1,11 @@
 'use client';
 
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import SessionProvider from "@/components/SessionProvider";
-import { ToastProvider } from "@/components/Toast";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import SessionProvider from "@/components/providers/SessionProvider";
+import { ToastProvider } from "@/components/shared/Toast";
+import { ErrorBoundary } from "@/components/providers/ErrorBoundary";
 import { useThemeStore } from "@/lib/store";
 import { useEffect } from "react";
 import { Inter } from 'next/font/google';
