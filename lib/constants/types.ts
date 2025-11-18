@@ -57,7 +57,9 @@ export interface Post {
   isPopular: boolean;
   isPinned: boolean;
   userId: string;
-  user?: User;
+  author?: User;
+  authorId?: string; // Same as userId, for consistency
+  user?: User; // Backward compatibility
   stockId?: string;
   stock?: Stock;
   createdAt: Date;
@@ -74,9 +76,7 @@ export interface Comment {
   id: string;
   content: string;
   authorId: string;
-  userId?: string; // Deprecated: use authorId
   author?: User;
-  user?: User; // Deprecated: use author
   postId: string;
   parentId?: string;
   replies?: Comment[];
@@ -166,4 +166,105 @@ export interface Notification {
     actorName?: string;
     actorImage?: string;
   };
+}
+
+/**
+ * API Response Types
+ */
+
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: {
+    message: string;
+    code?: string;
+    details?: any;
+    timestamp?: string;
+    path?: string;
+  };
+  timestamp?: string;
+}
+
+export interface PaginatedResponse<T = any> {
+  data: T[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}
+
+export interface ApiErrorResponse {
+  success: false;
+  error: {
+    message: string;
+    code?: string;
+    details?: any;
+    timestamp: string;
+    path?: string;
+  };
+}
+
+/**
+ * Form Data Types
+ */
+
+export interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+export interface SignupFormData {
+  email: string;
+  password: string;
+  name: string;
+  confirmPassword: string;
+}
+
+export interface PostFormData {
+  title: string;
+  content: string;
+  category: string;
+  tags?: string;
+  stockId?: string;
+}
+
+export interface CommentFormData {
+  content: string;
+  parentId?: string;
+}
+
+export interface ReportFormData {
+  reason: 'spam' | 'harassment' | 'inappropriate' | 'misinformation' | 'other';
+  description?: string;
+}
+
+/**
+ * Filter and Sort Types
+ */
+
+export type SortOrder = 'asc' | 'desc';
+
+export interface StockFilters {
+  market?: 'KOSPI' | 'KOSDAQ';
+  search?: string;
+  sortBy?: keyof Stock;
+  sortOrder?: SortOrder;
+}
+
+export interface NewsFilters {
+  category?: string;
+  search?: string;
+  isHot?: boolean;
+}
+
+export interface PostFilters {
+  category?: string;
+  search?: string;
+  userId?: string;
+  sortBy?: 'createdAt' | 'views' | 'likes';
+  sortOrder?: SortOrder;
 }

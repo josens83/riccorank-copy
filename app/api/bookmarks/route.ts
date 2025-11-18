@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { handleApiError, successResponse, ApiError } from '@/lib/api-utils';
-import { bookmarkSchema } from '@/lib/validations';
+import { bookmarkSchema } from '@/lib/utils/validations';
 import { mockStocks } from '@/lib/data';
 
 // In-memory storage for bookmarks

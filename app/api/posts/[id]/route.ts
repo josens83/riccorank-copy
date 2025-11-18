@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { handleApiError, successResponse, ApiError } from '@/lib/api-utils';
-import { updatePostSchema } from '@/lib/validations';
+import { updatePostSchema } from '@/lib/utils/validations';
 import { mockPosts } from '@/lib/data';
 
 // In-memory storage (same reference as in posts/route.ts)

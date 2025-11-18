@@ -19,7 +19,7 @@ import {
   FiCheckCircle,
 } from 'react-icons/fi';
 import Link from 'next/link';
-import { Post, Comment } from '@/lib/types';
+import { Post, Comment } from '@/lib/constants/types';
 import { useToast } from '@/components/Toast';
 
 export default function MyPage() {

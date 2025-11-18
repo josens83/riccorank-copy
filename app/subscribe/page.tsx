@@ -5,7 +5,7 @@ import { useThemeStore } from '@/lib/store';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { FiCheck, FiStar } from 'react-icons/fi';
-import { subscriptionPlans, requestPayment, generateMerchantUid } from '@/lib/payment';
+import { subscriptionPlans, requestPayment, generateMerchantUid } from '@/lib/external/payment';
 import { useToast } from '@/components/Toast';
 
 export default function SubscribePage() {

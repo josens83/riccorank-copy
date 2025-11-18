@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { handleApiError, successResponse, ApiError } from '@/lib/api-utils';
-import { createCommentSchema } from '@/lib/validations';
+import { createCommentSchema } from '@/lib/utils/validations';
 
 // In-memory storage for comments
 let comments: any[] = [

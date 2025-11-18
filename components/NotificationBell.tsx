@@ -15,7 +15,7 @@ import {
   FiCreditCard,
   FiInfo,
 } from 'react-icons/fi';
-import { Notification } from '@/lib/types';
+import { Notification } from '@/lib/constants/types';
 
 export default function NotificationBell() {
   const { isDarkMode } = useThemeStore();

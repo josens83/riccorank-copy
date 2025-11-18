@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import crypto from 'crypto';
-import { sendPasswordResetEmail } from '@/lib/email';
+import { sendPasswordResetEmail } from '@/lib/external/email';
 import { mockUsers } from '@/lib/data';
 
 // Mock storage for password reset tokens (in real app, use database)

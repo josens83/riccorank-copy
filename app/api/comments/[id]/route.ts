@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { handleApiError, successResponse, ApiError } from '@/lib/api-utils';
-import { updateCommentSchema } from '@/lib/validations';
+import { updateCommentSchema } from '@/lib/utils/validations';
 
 // Mock comments (should match comments/route.ts)
 let comments: any[] = [];
