@@ -248,8 +248,8 @@ export default function MyPage() {
                   </div>
 
                   {/* Edit Button */}
-                  <button
-                    onClick={() => setIsEditing(true)}
+                  <Link
+                    href="/mypage/edit"
                     className={`w-full mt-6 flex items-center justify-center space-x-2 px-4 py-2 rounded-md ${
                       isDarkMode
                         ? 'bg-blue-600 text-white hover:bg-blue-700'
@@ -258,7 +258,7 @@ export default function MyPage() {
                   >
                     <FiEdit className="w-4 h-4" />
                     <span>프로필 수정</span>
-                  </button>
+                  </Link>
                 </>
               ) : (
                 <>
