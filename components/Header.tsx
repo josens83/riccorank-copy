@@ -7,6 +7,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { FiSearch, FiMoon, FiSun, FiChevronDown, FiUser, FiLogOut } from 'react-icons/fi';
 import GlobalSearch from './GlobalSearch';
 import MobileMenu from './MobileMenu';
+import NotificationBell from './NotificationBell';
 
 const Header = () => {
   const { isDarkMode, toggleDarkMode } = useThemeStore();
@@ -132,6 +133,9 @@ const Header = () => {
             <div className="hidden md:block">
               <GlobalSearch />
             </div>
+
+            {/* Notifications - Only show for authenticated users */}
+            <NotificationBell />
 
             {/* Dark Mode Toggle - Hidden on small mobile */}
             <button
