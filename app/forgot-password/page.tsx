@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useThemeStore } from '@/lib/store';
 import Link from 'next/link';
 import { FiMail, FiArrowLeft } from 'react-icons/fi';
-import { useToast } from '@/components/Toast';
+import { useToast } from '@/components/shared/Toast';
 
 export default function ForgotPasswordPage() {
   const { isDarkMode } = useThemeStore();

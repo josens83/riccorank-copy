@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { handleApiError, successResponse, ApiError } from '@/lib/api-utils';
-import { likeSchema } from '@/lib/validations';
+import { handleApiError, successResponse, ApiError } from '@/lib/api/errors';
+import { likeSchema } from '@/lib/utils/validations';
 
 // In-memory storage for likes
 let likes: Array<{ id: string; userId: string; postId: string; createdAt: Date }> = [];

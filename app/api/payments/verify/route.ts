@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth.config';
-import { verifyPayment } from '@/lib/payment';
+import { verifyPayment } from '@/lib/external/payment';
 import { z } from 'zod';
 
 const verifyPaymentSchema = z.object({

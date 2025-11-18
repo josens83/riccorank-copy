@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
-import { handleApiError, successResponse } from '@/lib/api-utils';
-import { mockMarketIndices } from '@/lib/mockData';
-import { getMarketIndices } from '@/lib/stockApi';
-import { getCachedData } from '@/lib/cache';
+import { handleApiError, successResponse } from '@/lib/api/errors';
+import { mockMarketIndices } from '@/lib/data';
+import { getMarketIndices } from '@/lib/external/stockApi';
+import { getCachedData } from '@/lib/utils/cache';
 
 export async function GET(request: NextRequest) {
   try {

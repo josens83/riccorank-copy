@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth.config';
-import { mockUsers, mockPosts, mockComments } from '@/lib/mockData';
+import { mockUsers, mockPosts, mockComments } from '@/lib/data';
 
 /**
  * GET /api/admin/stats

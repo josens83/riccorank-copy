@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useThemeStore } from '@/lib/store';
-import { mockStockSentiment } from '@/lib/mockData';
+import { mockStockSentiment } from '@/lib/data';
 import { FiMessageCircle, FiThumbsUp, FiEye, FiSend, FiRefreshCw, FiEdit } from 'react-icons/fi';
 import Link from 'next/link';
-import { Post } from '@/lib/types';
+import { Post } from '@/types';
 
 export default function StockBoardPage() {
   const { isDarkMode } = useThemeStore();

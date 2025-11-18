@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
-import { handleApiError, successResponse, paginateArray } from '@/lib/api-utils';
-import { getStocksSchema } from '@/lib/validations';
-import { mockStocks } from '@/lib/mockData';
-import { getStocks } from '@/lib/stockApi';
-import { getCachedData, createCacheKey } from '@/lib/cache';
+import { handleApiError, successResponse, paginateArray } from '@/lib/api/errors';
+import { getStocksSchema } from '@/lib/utils/validations';
+import { mockStocks } from '@/lib/data';
+import { getStocks } from '@/lib/external/stockApi';
+import { getCachedData, createCacheKey } from '@/lib/utils/cache';
 
 export async function GET(request: NextRequest) {
   try {

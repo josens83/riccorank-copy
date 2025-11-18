@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
-import { handleApiError, successResponse, ApiError } from '@/lib/api-utils';
-import { bookmarkSchema } from '@/lib/validations';
-import { mockStocks } from '@/lib/mockData';
+import { handleApiError, successResponse, ApiError } from '@/lib/api/errors';
+import { bookmarkSchema } from '@/lib/utils/validations';
+import { mockStocks } from '@/lib/data';
 
 // In-memory storage for bookmarks
 let bookmarks: Array<{ id: string; userId: string; stockId: string; createdAt: Date }> = [];

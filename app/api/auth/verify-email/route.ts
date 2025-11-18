@@ -3,8 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth.config';
 import { z } from 'zod';
 import crypto from 'crypto';
-import { sendVerificationEmail, sendWelcomeEmail } from '@/lib/email';
-import { mockUsers } from '@/lib/mockData';
+import { sendVerificationEmail, sendWelcomeEmail } from '@/lib/external/email';
+import { mockUsers } from '@/lib/data';
 
 // Mock storage for email verification tokens (in real app, use database)
 const mockVerificationTokens: Map<

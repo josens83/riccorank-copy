@@ -1,4 +1,4 @@
-// Type Definitions for RANKUP Platform
+// Domain Models for RANKUP Platform
 
 export interface Stock {
   id: string;
@@ -57,7 +57,9 @@ export interface Post {
   isPopular: boolean;
   isPinned: boolean;
   userId: string;
-  user?: User;
+  author?: User;
+  authorId?: string; // Same as userId, for consistency
+  user?: User; // Backward compatibility
   stockId?: string;
   stock?: Stock;
   createdAt: Date;
@@ -74,9 +76,7 @@ export interface Comment {
   id: string;
   content: string;
   authorId: string;
-  userId?: string; // Deprecated: use authorId
   author?: User;
-  user?: User; // Deprecated: use author
   postId: string;
   parentId?: string;
   replies?: Comment[];

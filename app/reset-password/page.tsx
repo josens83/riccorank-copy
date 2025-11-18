@@ -5,7 +5,7 @@ import { useThemeStore } from '@/lib/store';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { FiLock, FiEye, FiEyeOff, FiAlertCircle } from 'react-icons/fi';
-import { useToast } from '@/components/Toast';
+import { useToast } from '@/components/shared/Toast';
 
 export default function ResetPasswordPage() {
   const { isDarkMode } = useThemeStore();

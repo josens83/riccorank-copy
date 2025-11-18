@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useThemeStore } from '@/lib/store';
-import { mockNews } from '@/lib/mockData';
+import { mockNews } from '@/lib/data';
 import { FiClock, FiExternalLink } from 'react-icons/fi';
 
 const LiveNewsSidebar = () => {

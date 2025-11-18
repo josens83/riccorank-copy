@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import crypto from 'crypto';
-import { sendPasswordResetEmail } from '@/lib/email';
-import { mockUsers } from '@/lib/mockData';
+import { sendPasswordResetEmail } from '@/lib/external/email';
+import { mockUsers } from '@/lib/data';
 
 // Mock storage for password reset tokens (in real app, use database)
 const mockResetTokens: Map<string, { email: string; token: string; expiresAt: Date }> = new Map();

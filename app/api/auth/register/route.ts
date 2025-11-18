@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server';
-import { handleApiError, successResponse, ApiError } from '@/lib/api-utils';
-import { registerSchema } from '@/lib/validations';
+import { handleApiError, successResponse, ApiError } from '@/lib/api/errors';
+import { registerSchema } from '@/lib/utils/validations';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import { sendVerificationEmail } from '@/lib/email';
-import { mockUsers } from '@/lib/mockData';
+import { sendVerificationEmail } from '@/lib/external/email';
+import { mockUsers } from '@/lib/data';
 
 // Mock storage for email verification tokens (in real app, use database)
 export const mockVerificationTokens: Map<

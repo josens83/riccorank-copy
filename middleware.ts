@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { SECURITY_HEADERS } from '@/lib/security';
+import { SECURITY_HEADERS } from '@/lib/utils/security';
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth;

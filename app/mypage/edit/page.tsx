@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FiUser, FiMail, FiCamera, FiLock, FiArrowLeft, FiEye, FiEyeOff } from 'react-icons/fi';
-import { useToast } from '@/components/Toast';
+import { useToast } from '@/components/shared/Toast';
 
 export default function EditProfilePage() {
   const { isDarkMode } = useThemeStore();

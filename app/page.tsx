@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useThemeStore } from '@/lib/store';
-import { mockMarketIndices, mockThemeStocks, mockUpLimitStocks } from '@/lib/mockData';
+import { mockMarketIndices, mockThemeStocks, mockUpLimitStocks } from '@/lib/data';
 import {
   FiTrendingUp,
   FiTrendingDown,
