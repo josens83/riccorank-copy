@@ -2,6 +2,8 @@ import { NextRequest } from 'next/server';
 import { handleApiError, successResponse, paginateArray } from '@/lib/api-utils';
 import { getStocksSchema } from '@/lib/validations';
 import { mockStocks } from '@/lib/mockData';
+import { getStocks } from '@/lib/stockApi';
+import { getCachedData, createCacheKey } from '@/lib/cache';
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,7 +18,22 @@ export async function GET(request: NextRequest) {
       limit: searchParams.get('limit'),
     });
 
-    let stocks = [...mockStocks];
+    // 실제 API에서 데이터 가져오기 (캐시 사용, 5분 TTL)
+    const cacheKey = createCacheKey('stocks', { market: params.market || 'all' });
+    let stocks = await getCachedData(
+      cacheKey,
+      async () => {
+        try {
+          const apiStocks = await getStocks(params.market as 'KOSPI' | 'KOSDAQ' | undefined, 50);
+          // API 실패 시 fallback to mock data
+          return apiStocks.length > 0 ? apiStocks : mockStocks;
+        } catch (error) {
+          console.error('Stock API failed, using mock data:', error);
+          return mockStocks;
+        }
+      },
+      5 * 60 * 1000 // 5분 캐시
+    );
 
     // Filter by market
     if (params.market) {
