@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authConfig } from './auth.config';
-import { apiRateLimiter, authRateLimiter, getClientIdentifier, SECURITY_HEADERS } from './security';
-import { handleApiError, successResponse } from './api/errors';
+import { authConfig } from '../auth.config';
+import { apiRateLimiter, authRateLimiter, getClientIdentifier, SECURITY_HEADERS } from '../utils/security';
+import { handleApiError, successResponse } from './errors';
 
 /**
  * Middleware for API routes

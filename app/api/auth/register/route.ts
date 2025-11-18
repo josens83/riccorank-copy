@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { handleApiError, successResponse, ApiError } from '@/lib/api-utils';
+import { handleApiError, successResponse, ApiError } from '@/lib/api/errors';
 import { registerSchema } from '@/lib/utils/validations';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';

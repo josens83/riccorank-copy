@@ -2,8 +2,8 @@
 
 import { useThemeStore } from '@/lib/store';
 import { mockNews, mockPopularSearches } from '@/lib/data';
-import PopularStocksSidebar from '@/components/PopularStocksSidebar';
-import LiveNewsSidebar from '@/components/LiveNewsSidebar';
+import PopularStocksSidebar from '@/components/widgets/PopularStocksSidebar';
+import LiveNewsSidebar from '@/components/widgets/LiveNewsSidebar';
 import { FiClock, FiEye, FiArrowRight } from 'react-icons/fi';
 import Link from 'next/link';
 

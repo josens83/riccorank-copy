@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { handleApiError, successResponse, ApiError } from '@/lib/api-utils';
+import { handleApiError, successResponse, ApiError } from '@/lib/api/errors';
 import { likeSchema } from '@/lib/utils/validations';
 
 // In-memory storage for likes

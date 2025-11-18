@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { handleApiError, successResponse, paginateArray, ApiError } from '@/lib/api-utils';
+import { handleApiError, successResponse, paginateArray, ApiError } from '@/lib/api/errors';
 import { getPostsSchema, createPostSchema } from '@/lib/utils/validations';
 import { mockPosts } from '@/lib/data';
 

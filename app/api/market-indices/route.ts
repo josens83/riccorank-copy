@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { handleApiError, successResponse } from '@/lib/api-utils';
+import { handleApiError, successResponse } from '@/lib/api/errors';
 import { mockMarketIndices } from '@/lib/data';
 import { getMarketIndices } from '@/lib/external/stockApi';
 import { getCachedData } from '@/lib/utils/cache';

@@ -19,8 +19,8 @@ import {
   FiCheckCircle,
 } from 'react-icons/fi';
 import Link from 'next/link';
-import { Post, Comment } from '@/lib/constants/types';
-import { useToast } from '@/components/Toast';
+import { Post, Comment } from '@/types';
+import { useToast } from '@/components/shared/Toast';
 
 export default function MyPage() {
   const { isDarkMode } = useThemeStore();

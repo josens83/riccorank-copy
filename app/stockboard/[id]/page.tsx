@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { FiArrowLeft, FiHeart, FiMessageCircle, FiEye, FiEdit, FiTrash2 } from 'react-icons/fi';
 import Link from 'next/link';
-import { Post, Comment } from '@/lib/constants/types';
+import { Post, Comment } from '@/types';
 
 function CommentItem({ comment, onReply, onDelete, userId }: {
   comment: Comment;

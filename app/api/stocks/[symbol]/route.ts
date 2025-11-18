@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { handleApiError, successResponse, ApiError } from '@/lib/api-utils';
+import { handleApiError, successResponse, ApiError } from '@/lib/api/errors';
 import { stockSymbolSchema } from '@/lib/utils/validations';
 import { mockStocks } from '@/lib/data';
 

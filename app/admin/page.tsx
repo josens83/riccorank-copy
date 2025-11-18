@@ -19,7 +19,7 @@ import {
   FiUserCheck
 } from 'react-icons/fi';
 import Link from 'next/link';
-import { useToast } from '@/components/Toast';
+import { useToast } from '@/components/shared/Toast';
 
 interface DashboardStats {
   totalUsers: number;
