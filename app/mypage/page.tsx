@@ -14,14 +14,18 @@ import {
   FiBookmark,
   FiFileText,
   FiEye,
-  FiTrash2
+  FiTrash2,
+  FiAlertCircle,
+  FiCheckCircle,
 } from 'react-icons/fi';
 import Link from 'next/link';
 import { Post, Comment } from '@/lib/types';
+import { useToast } from '@/components/Toast';
 
 export default function MyPage() {
   const { isDarkMode } = useThemeStore();
   const { data: session, status } = useSession();
+  const { showToast } = useToast();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'posts' | 'comments' | 'bookmarks'>('posts');
   const [userPosts, setUserPosts] = useState<Post[]>([]);
@@ -33,6 +37,8 @@ export default function MyPage() {
     name: '',
     email: '',
   });
+  const [isResendingEmail, setIsResendingEmail] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(true); // Will be fetched from user data
 
   // Redirect if not authenticated
   if (status === 'unauthenticated') {
@@ -136,6 +142,28 @@ export default function MyPage() {
     setIsEditing(false);
   };
 
+  const handleResendVerificationEmail = async () => {
+    setIsResendingEmail(true);
+    try {
+      const response = await fetch('/api/auth/verify-email', {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showToast(data.message, 'success');
+      } else {
+        showToast(data.error || '이메일 전송에 실패했습니다.', 'error');
+      }
+    } catch (error) {
+      console.error('Failed to resend verification email:', error);
+      showToast('오류가 발생했습니다. 다시 시도해주세요.', 'error');
+    } finally {
+      setIsResendingEmail(false);
+    }
+  };
+
   const getTimeAgo = (date: Date | string) => {
     const now = new Date();
     const postDate = new Date(date);
@@ -200,6 +228,75 @@ export default function MyPage() {
                       {session?.user.email}
                     </p>
                   </div>
+
+                  {/* Email Verification Banner */}
+                  {!emailVerified && session?.user.provider === 'credentials' && (
+                    <div
+                      className={`mb-6 p-4 rounded-lg border ${
+                        isDarkMode
+                          ? 'bg-yellow-900/20 border-yellow-800'
+                          : 'bg-yellow-50 border-yellow-200'
+                      }`}
+                    >
+                      <div className="flex items-start space-x-3">
+                        <FiAlertCircle
+                          className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
+                            isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
+                          }`}
+                        />
+                        <div className="flex-1">
+                          <p
+                            className={`text-sm font-medium mb-1 ${
+                              isDarkMode ? 'text-yellow-300' : 'text-yellow-800'
+                            }`}
+                          >
+                            이메일 인증이 필요합니다
+                          </p>
+                          <p
+                            className={`text-xs mb-3 ${
+                              isDarkMode ? 'text-yellow-400' : 'text-yellow-700'
+                            }`}
+                          >
+                            계정의 모든 기능을 사용하려면 이메일을 인증해주세요.
+                          </p>
+                          <button
+                            onClick={handleResendVerificationEmail}
+                            disabled={isResendingEmail}
+                            className={`text-xs px-3 py-1.5 rounded font-medium transition-colors ${
+                              isDarkMode
+                                ? 'bg-yellow-600 text-white hover:bg-yellow-700'
+                                : 'bg-yellow-600 text-white hover:bg-yellow-700'
+                            } disabled:opacity-50 disabled:cursor-not-allowed`}
+                          >
+                            {isResendingEmail ? '전송 중...' : '인증 이메일 재전송'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {emailVerified && (
+                    <div
+                      className={`mb-6 p-3 rounded-lg border flex items-center space-x-2 ${
+                        isDarkMode
+                          ? 'bg-green-900/20 border-green-800'
+                          : 'bg-green-50 border-green-200'
+                      }`}
+                    >
+                      <FiCheckCircle
+                        className={`w-4 h-4 ${
+                          isDarkMode ? 'text-green-400' : 'text-green-600'
+                        }`}
+                      />
+                      <span
+                        className={`text-xs ${
+                          isDarkMode ? 'text-green-300' : 'text-green-700'
+                        }`}
+                      >
+                        이메일 인증 완료
+                      </span>
+                    </div>
+                  )}
 
                   {/* Stats */}
                   <div className={`grid grid-cols-3 gap-4 py-4 border-y ${

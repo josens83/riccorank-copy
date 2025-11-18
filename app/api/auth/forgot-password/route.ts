@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import crypto from 'crypto';
+import { sendPasswordResetEmail } from '@/lib/email';
+import { mockUsers } from '@/lib/mockData';
 
 // Mock storage for password reset tokens (in real app, use database)
 const mockResetTokens: Map<string, { email: string; token: string; expiresAt: Date }> = new Map();
@@ -21,11 +23,11 @@ export async function POST(request: NextRequest) {
     // Normalize email
     const normalizedEmail = email.toLowerCase().trim();
 
-    // In real app, check if user exists in database
-    // For security, always return success even if user doesn't exist
-    // This prevents email enumeration attacks
+    // Check if user exists (for internal use, don't reveal in response)
+    const user = mockUsers.find((u) => u.email === normalizedEmail);
 
-    // Generate reset token
+    // Generate reset token regardless of whether user exists
+    // This prevents email enumeration attacks
     const resetToken = crypto.randomBytes(32).toString('hex');
     const tokenHash = crypto.createHash('sha256').update(resetToken).digest('hex');
 
@@ -37,18 +39,17 @@ export async function POST(request: NextRequest) {
       expiresAt,
     });
 
-    // In real app, send email with reset link
-    // For now, we'll log it (in production, use SendGrid, AWS SES, etc.)
-    const resetUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
+    // Send email only if user exists
+    if (user) {
+      const resetUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
 
-    console.log('='.repeat(80));
-    console.log('PASSWORD RESET EMAIL (Development Mode)');
-    console.log('='.repeat(80));
-    console.log(`To: ${normalizedEmail}`);
-    console.log(`Subject: 비밀번호 재설정 요청`);
-    console.log(`\n비밀번호 재설정 링크:\n${resetUrl}`);
-    console.log(`\n이 링크는 1시간 동안 유효합니다.`);
-    console.log('='.repeat(80));
+      // Send password reset email
+      await sendPasswordResetEmail(user.email, user.name, resetUrl);
+
+      console.log('✅ Password reset email sent to:', user.email);
+    } else {
+      console.log('⚠️  User not found, but returning success to prevent enumeration');
+    }
 
     // Always return success to prevent email enumeration
     return NextResponse.json({

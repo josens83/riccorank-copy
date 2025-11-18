@@ -99,6 +99,7 @@ export interface User {
   provider?: string;
   role: 'user' | 'admin';
   suspended: boolean;
+  emailVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
