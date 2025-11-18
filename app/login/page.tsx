@@ -121,11 +121,19 @@ export default function LoginPage() {
 
             {/* Password Input */}
             <div>
-              <label className={`block text-sm font-medium mb-2 ${
+              <div className="flex justify-between items-center mb-2">
+              <label className={`block text-sm font-medium ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-700'
               }`}>
                 비밀번호
               </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  비밀번호를 잊으셨나요?
+                </Link>
+              </div>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
