@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth.config';
-import { mockComments, mockUsers, mockPosts } from '@/lib/mockData';
+import { mockComments, mockUsers, mockPosts } from '@/lib/data';
 import { z } from 'zod';
 
 const deleteCommentSchema = z.object({

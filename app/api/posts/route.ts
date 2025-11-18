@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { handleApiError, successResponse, paginateArray, ApiError } from '@/lib/api-utils';
 import { getPostsSchema, createPostSchema } from '@/lib/validations';
-import { mockPosts } from '@/lib/mockData';
+import { mockPosts } from '@/lib/data';
 
 // In-memory storage for new posts (in real app, use database)
 let posts = [...mockPosts];

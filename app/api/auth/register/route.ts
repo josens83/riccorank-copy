@@ -4,7 +4,7 @@ import { registerSchema } from '@/lib/validations';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { sendVerificationEmail } from '@/lib/email';
-import { mockUsers } from '@/lib/mockData';
+import { mockUsers } from '@/lib/data';
 
 // Mock storage for email verification tokens (in real app, use database)
 export const mockVerificationTokens: Map<

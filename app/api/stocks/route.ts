@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { handleApiError, successResponse, paginateArray } from '@/lib/api-utils';
 import { getStocksSchema } from '@/lib/validations';
-import { mockStocks } from '@/lib/mockData';
+import { mockStocks } from '@/lib/data';
 import { getStocks } from '@/lib/stockApi';
 import { getCachedData, createCacheKey } from '@/lib/cache';
 

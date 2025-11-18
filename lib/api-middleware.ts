@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authConfig } from './auth.config';
 import { apiRateLimiter, authRateLimiter, getClientIdentifier, SECURITY_HEADERS } from './security';
+import { handleApiError, successResponse } from './api/errors';
 
 /**
  * Middleware for API routes
@@ -203,33 +204,5 @@ export async function apiMiddleware(
   return { success: true };
 }
 
-/**
- * Error handler for API routes
- */
-export function handleApiError(error: unknown): NextResponse {
-  console.error('API Error:', error);
-
-  if (error instanceof Error) {
-    // Don't expose internal error messages in production
-    const message = process.env.NODE_ENV === 'development'
-      ? error.message
-      : 'Internal server error';
-
-    return NextResponse.json(
-      { error: message },
-      { status: 500 }
-    );
-  }
-
-  return NextResponse.json(
-    { error: 'Internal server error' },
-    { status: 500 }
-  );
-}
-
-/**
- * Success response helper
- */
-export function successResponse(data: any, status: number = 200): NextResponse {
-  return NextResponse.json(data, { status });
-}
+// Note: handleApiError and successResponse are now imported from ./api/errors
+// to eliminate duplication and ensure consistency across the codebase.

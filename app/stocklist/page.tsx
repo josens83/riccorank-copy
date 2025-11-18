@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useThemeStore } from '@/lib/store';
-import { mockStocks } from '@/lib/mockData';
+import { mockStocks } from '@/lib/data';
 import { FiStar, FiSearch, FiChevronUp, FiChevronDown } from 'react-icons/fi';
 import Link from 'next/link';
 

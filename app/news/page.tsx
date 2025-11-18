@@ -1,7 +1,7 @@
 'use client';
 
 import { useThemeStore } from '@/lib/store';
-import { mockNews, mockPopularSearches } from '@/lib/mockData';
+import { mockNews, mockPopularSearches } from '@/lib/data';
 import PopularStocksSidebar from '@/components/PopularStocksSidebar';
 import LiveNewsSidebar from '@/components/LiveNewsSidebar';
 import { FiClock, FiEye, FiArrowRight } from 'react-icons/fi';

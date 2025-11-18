@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useThemeStore } from '@/lib/store';
-import { mockPopularSearches } from '@/lib/mockData';
+import { mockPopularSearches } from '@/lib/data';
 import { FiTrendingUp, FiExternalLink } from 'react-icons/fi';
 
 const PopularStocksSidebar = () => {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth.config';
-import { mockNotifications } from '@/lib/mockData';
+import { mockNotifications } from '@/lib/data';
 import { z } from 'zod';
 
 /**

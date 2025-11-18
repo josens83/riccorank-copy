@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { handleApiError, successResponse, paginateArray } from '@/lib/api-utils';
 import { getNewsSchema } from '@/lib/validations';
-import { mockNews } from '@/lib/mockData';
+import { mockNews } from '@/lib/data';
 import { getFinancialNews, getNewsByCategory, searchNews } from '@/lib/newsApi';
 import { getCachedData, createCacheKey } from '@/lib/cache';
 
