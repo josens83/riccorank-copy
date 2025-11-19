@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://rankup:rankup123@postgres:5432/rankup?schema=public
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-dev-secret-change-in-production}
+      - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL:-}
+      - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - rankup-network
+    restart: unless-stopped
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: rankup-postgres
+    environment:
+      POSTGRES_USER: rankup
+      POSTGRES_PASSWORD: rankup123
+      POSTGRES_DB: rankup
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rankup -d rankup"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rankup-network
+    restart: unless-stopped
+
+  # Redis (for local development without Upstash)
+  redis:
+    image: redis:7-alpine
+    container_name: rankup-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - rankup-network
+    restart: unless-stopped
+
+  # pgAdmin (Database management UI)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: rankup-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@rankup.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - rankup-network
+    restart: unless-stopped
+    profiles:
+      - tools
+
+  # Redis Commander (Redis management UI)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: rankup-redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - rankup-network
+    restart: unless-stopped
+    profiles:
+      - tools
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  rankup-network:
+    driver: bridge

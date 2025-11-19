@@ -1,28 +1,45 @@
 {
   "name": "RANKUP - 종합 금융 정보 플랫폼",
   "short_name": "RANKUP",
-  "description": "실시간 주식, 뉴스, 커뮤니티를 한 곳에서",
+  "description": "실시간 주식 정보, 뉴스, 커뮤니티를 한 곳에서",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "background_color": "#0a0a0a",
+  "theme_color": "#3b82f6",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable any"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable any"
     }
   ],
-  "categories": ["finance", "business", "news"],
-  "lang": "ko",
-  "dir": "ltr",
-  "scope": "/"
+  "categories": ["finance", "news", "business"],
+  "shortcuts": [
+    {
+      "name": "주식 목록",
+      "short_name": "주식",
+      "description": "주식 목록 보기",
+      "url": "/stocklist"
+    },
+    {
+      "name": "뉴스",
+      "short_name": "뉴스",
+      "description": "최신 금융 뉴스",
+      "url": "/news"
+    },
+    {
+      "name": "커뮤니티",
+      "short_name": "게시판",
+      "description": "종목 토론방",
+      "url": "/stockboard"
+    }
+  ]
 }
