@@ -33,6 +33,10 @@ model User {
   bookmarks     Bookmark[]
   sessions      Session[]
   auditLogs     AuditLog[]
+
+  @@index([role])
+  @@index([createdAt])
+  @@index([provider])
 }
 
 // Stock Model
@@ -57,6 +61,11 @@ model Stock {
 
   bookmarks     Bookmark[]
   posts         Post[]
+
+  @@index([market])
+  @@index([rank])
+  @@index([changePercent])
+  @@index([updatedAt])
 }
 
 // News Model
@@ -74,6 +83,11 @@ model News {
   views         Int       @default(0)
   publishedAt   DateTime  @default(now())
   createdAt     DateTime  @default(now())
+
+  @@index([publishedAt])
+  @@index([category])
+  @@index([isHot])
+  @@index([views])
 }
 
 // Post Model (토론방)
@@ -98,6 +112,14 @@ model Post {
 
   comments      Comment[]
   likes         Like[]
+
+  @@index([userId])
+  @@index([stockId])
+  @@index([category])
+  @@index([createdAt])
+  @@index([isPopular])
+  @@index([isPinned])
+  @@index([views])
 }
 
 // Comment Model
@@ -117,6 +139,11 @@ model Comment {
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([postId])
+  @@index([parentId])
+  @@index([createdAt])
 }
 
 // Like Model
@@ -158,6 +185,8 @@ model ThemeStock {
   changePercent Float
   isHot         Boolean   @default(false)
   updatedAt     DateTime  @updatedAt
+
+  @@index([isHot])
 }
 
 // Market Index Model (시장 지수)
@@ -170,6 +199,8 @@ model MarketIndex {
   changePercent Float
   country       String
   updatedAt     DateTime  @updatedAt
+
+  @@index([country])
 }
 
 // Session Model (다중 기기 세션 관리)
