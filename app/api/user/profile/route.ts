@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth.config';
 import { mockUsers } from '@/lib/data';
 import { z } from 'zod';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 const updateProfileSchema = z.object({
   name: z.string().min(2, '이름은 최소 2자 이상이어야 합니다.').optional(),

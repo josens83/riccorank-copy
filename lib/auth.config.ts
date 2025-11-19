@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
-import { loginSchema } from './validations';
+import { loginSchema } from './utils/validations';
 import bcrypt from 'bcrypt';
 
 // Mock user database (in real app, use Prisma)

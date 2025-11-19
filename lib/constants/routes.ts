@@ -2,6 +2,15 @@
  * Route Constants
  *
  * Centralized route definitions to prevent magic strings and enable type-safe navigation.
+ *
+ * ## Route Groups Structure (Next.js 13+)
+ * The app directory uses Route Groups for better organization:
+ * - app/(public)/*    - Public pages (no auth required)
+ * - app/(auth)/*      - Authentication pages
+ * - app/(dashboard)/* - Protected user pages (auth required)
+ * - app/(admin)/*     - Admin-only pages
+ *
+ * Note: Route Groups don't affect URLs - they're just for organization.
  */
 
 export const ROUTES = {

@@ -17,6 +17,13 @@ model User {
   password      String?
   image         String?
   provider      String?   // google, email
+  role          String    @default("user") // user, admin
+
+  // 2FA fields
+  twoFactorEnabled  Boolean @default(false)
+  twoFactorSecret   String?
+  backupCodes       String? // JSON array of hashed backup codes
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -24,6 +31,8 @@ model User {
   comments      Comment[]
   likes         Like[]
   bookmarks     Bookmark[]
+  sessions      Session[]
+  auditLogs     AuditLog[]
 }
 
 // Stock Model
@@ -161,4 +170,44 @@ model MarketIndex {
   changePercent Float
   country       String
   updatedAt     DateTime  @updatedAt
+}
+
+// Session Model (다중 기기 세션 관리)
+model Session {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  token         String    @unique
+  deviceInfo    String?   // User agent, device type
+  ipAddress     String?
+  lastActive    DateTime  @default(now())
+  expiresAt     DateTime
+
+  createdAt     DateTime  @default(now())
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+// Audit Log Model (보안 감사 로그)
+model AuditLog {
+  id            String    @id @default(cuid())
+  userId        String?
+  user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  action        String    // login, logout, password_change, 2fa_enabled, etc.
+  resource      String?   // user, post, subscription, etc.
+  resourceId    String?
+
+  ipAddress     String?
+  userAgent     String?
+  metadata      String?   // JSON for additional context
+
+  createdAt     DateTime  @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
 }
