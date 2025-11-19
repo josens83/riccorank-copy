@@ -3,10 +3,16 @@ import { handleApiError, successResponse, paginateArray } from '@/lib/api/errors
 import { getStocksSchema } from '@/lib/utils/validations';
 import { mockStocks } from '@/lib/data';
 import { getStocks } from '@/lib/external/stockApi';
-import { getCachedData, createCacheKey } from '@/lib/utils/cache';
+import { StockCacheService } from '@/lib/cache/api-cache';
+import { withRateLimit } from '@/lib/rate-limit';
+import { log } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
+    // Rate limiting
+    const rateLimitResponse = await withRateLimit(request, 'api');
+    if (rateLimitResponse) return rateLimitResponse;
+
     const searchParams = request.nextUrl.searchParams;
 
     const params = getStocksSchema.parse({
@@ -18,22 +24,29 @@ export async function GET(request: NextRequest) {
       limit: searchParams.get('limit'),
     });
 
-    // 실제 API에서 데이터 가져오기 (캐시 사용, 5분 TTL)
-    const cacheKey = createCacheKey('stocks', { market: params.market || 'all' });
-    let stocks = await getCachedData(
-      cacheKey,
-      async () => {
-        try {
-          const apiStocks = await getStocks(params.market as 'KOSPI' | 'KOSDAQ' | undefined, 50);
-          // API 실패 시 fallback to mock data
-          return apiStocks.length > 0 ? apiStocks : mockStocks;
-        } catch (error) {
-          console.error('Stock API failed, using mock data:', error);
-          return mockStocks;
-        }
-      },
-      5 * 60 * 1000 // 5분 캐시
-    );
+    // Redis 캐시에서 먼저 확인
+    const market = params.market || 'all';
+    const cached = await StockCacheService.getList(market, params.page);
+
+    let stocks;
+    if (cached && !params.search && !params.sortBy) {
+      // 검색/정렬 없는 경우만 캐시 사용
+      stocks = cached as typeof mockStocks;
+      log.debug('Stocks cache hit', { market, page: params.page });
+    } else {
+      // API에서 데이터 가져오기
+      try {
+        const apiStocks = await getStocks(params.market as 'KOSPI' | 'KOSDAQ' | undefined, 50);
+        stocks = apiStocks.length > 0 ? apiStocks : mockStocks;
+
+        // Redis에 캐시 저장
+        await StockCacheService.setList(market, params.page, stocks);
+        log.debug('Stocks fetched from API', { market, count: stocks.length });
+      } catch (error) {
+        log.error('Stock API failed, using mock data', error as Error);
+        stocks = mockStocks;
+      }
+    }
 
     // Filter by market
     if (params.market) {
