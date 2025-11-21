@@ -138,7 +138,13 @@ const withPWA = withPWAInit({
 const nextConfig: NextConfig = {
   // Image optimization
   images: {
-    domains: ['lh3.googleusercontent.com'], // Add Google OAuth image domains
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
+      },
+    ],
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -154,7 +160,6 @@ const nextConfig: NextConfig = {
 
   // Performance optimizations
   reactStrictMode: true,
-  swcMinify: true,
 
   // Experimental features for better performance
   experimental: {

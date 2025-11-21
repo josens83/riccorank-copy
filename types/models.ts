@@ -66,6 +66,8 @@ export interface Post {
   updatedAt: Date;
   comments?: Comment[];
   likes?: Like[];
+  likeCount?: number;
+  commentCount?: number;
   _count?: {
     comments: number;
     likes: number;

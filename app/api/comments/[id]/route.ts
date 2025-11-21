@@ -7,9 +7,10 @@ let comments: any[] = [];
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await props.params;
     const { id } = params;
     const body = await request.json();
     const data = updateCommentSchema.parse(body);
@@ -35,9 +36,10 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await props.params;
     const { id } = params;
 
     const commentIndex = comments.findIndex((c) => c.id === id);

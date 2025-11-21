@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth.config';
+import { auth } from '@/lib/auth';
 import { featureFlags, isFeatureEnabled } from '@/lib/feature-flags';
 import { log } from '@/lib/logger';
 
@@ -10,7 +9,7 @@ import { log } from '@/lib/logger';
  */
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await await auth();
     const context = session?.user
       ? {
           userId: session.user.id,
@@ -55,7 +54,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const session = await getServerSession(authOptions);
+    const session = await await auth();
     const context = session?.user
       ? {
           userId: session.user.id,

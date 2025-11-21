@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth.config';
+import { auth } from '@/lib/auth';
 import { deleteUserData } from '@/lib/data-export';
 import { log } from '@/lib/logger';
 
@@ -10,7 +9,7 @@ import { log } from '@/lib/logger';
  */
 export async function DELETE(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await await auth();
 
     if (!session?.user?.id) {
       return NextResponse.json(

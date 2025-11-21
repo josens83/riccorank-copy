@@ -25,7 +25,7 @@ import { useToast } from '@/components/shared/Toast';
 export default function MyPage() {
   const { isDarkMode } = useThemeStore();
   const { data: session, status } = useSession();
-  const { showToast } = useToast();
+  const { success: showSuccess, error: showError } = useToast();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'posts' | 'comments' | 'bookmarks'>('posts');
   const [userPosts, setUserPosts] = useState<Post[]>([]);
@@ -152,13 +152,13 @@ export default function MyPage() {
       const data = await response.json();
 
       if (response.ok) {
-        showToast(data.message, 'success');
+        showSuccess(data.message);
       } else {
-        showToast(data.error || '이메일 전송에 실패했습니다.', 'error');
+        showError(data.error || '이메일 전송에 실패했습니다.');
       }
     } catch (error) {
       console.error('Failed to resend verification email:', error);
-      showToast('오류가 발생했습니다. 다시 시도해주세요.', 'error');
+      showError('오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setIsResendingEmail(false);
     }
@@ -230,7 +230,7 @@ export default function MyPage() {
                   </div>
 
                   {/* Email Verification Banner */}
-                  {!emailVerified && session?.user.provider === 'credentials' && (
+                  {!emailVerified && (session?.user as any)?.provider === 'credentials' && (
                     <div
                       className={`mb-6 p-4 rounded-lg border ${
                         isDarkMode

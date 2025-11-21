@@ -9,7 +9,7 @@ import { useToast } from '@/components/shared/Toast';
 
 export default function ResetPasswordPage() {
   const { isDarkMode } = useThemeStore();
-  const { showToast } = useToast();
+  const { success: showSuccess, error: showError } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -25,7 +25,7 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     if (!token) {
-      showToast('유효하지 않은 링크입니다.', 'error');
+      showError('유효하지 않은 링크입니다.');
       router.push('/forgot-password');
       return;
     }
@@ -40,12 +40,12 @@ export default function ResetPasswordPage() {
           setIsValidToken(true);
           setEmail(data.email);
         } else {
-          showToast(data.error || '유효하지 않은 토큰입니다.', 'error');
+          showError(data.error || '유효하지 않은 토큰입니다.');
           setTimeout(() => router.push('/forgot-password'), 2000);
         }
       } catch (error) {
         console.error('Token validation error:', error);
-        showToast('오류가 발생했습니다.', 'error');
+        showError('오류가 발생했습니다.');
         setTimeout(() => router.push('/forgot-password'), 2000);
       } finally {
         setIsValidating(false);
@@ -53,7 +53,7 @@ export default function ResetPasswordPage() {
     };
 
     validateToken();
-  }, [token, router, showToast]);
+  }, [token, router, showError]);
 
   const validatePassword = () => {
     if (password.length < 8) {
@@ -79,7 +79,7 @@ export default function ResetPasswordPage() {
 
     const error = validatePassword();
     if (error) {
-      showToast(error, 'error');
+      showError(error);
       return;
     }
 
@@ -95,14 +95,14 @@ export default function ResetPasswordPage() {
       const data = await response.json();
 
       if (response.ok) {
-        showToast(data.message, 'success');
+        showSuccess(data.message);
         setTimeout(() => router.push('/login'), 2000);
       } else {
-        showToast(data.error || '비밀번호 재설정에 실패했습니다.', 'error');
+        showError(data.error || '비밀번호 재설정에 실패했습니다.');
       }
     } catch (error) {
       console.error('Reset password error:', error);
-      showToast('오류가 발생했습니다. 다시 시도해주세요.', 'error');
+      showError('오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setIsSubmitting(false);
     }

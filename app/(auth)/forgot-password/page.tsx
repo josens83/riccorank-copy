@@ -8,7 +8,7 @@ import { useToast } from '@/components/shared/Toast';
 
 export default function ForgotPasswordPage() {
   const { isDarkMode } = useThemeStore();
-  const { showToast } = useToast();
+  const { success: showSuccess, error: showError } = useToast();
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -17,7 +17,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
 
     if (!email) {
-      showToast('이메일을 입력해주세요.', 'error');
+      showError('이메일을 입력해주세요.');
       return;
     }
 
@@ -34,13 +34,13 @@ export default function ForgotPasswordPage() {
 
       if (response.ok) {
         setIsSuccess(true);
-        showToast(data.message, 'success');
+        showSuccess(data.message);
       } else {
-        showToast(data.error || '요청에 실패했습니다.', 'error');
+        showError(data.error || '요청에 실패했습니다.');
       }
     } catch (error) {
       console.error('Forgot password error:', error);
-      showToast('오류가 발생했습니다. 다시 시도해주세요.', 'error');
+      showError('오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setIsSubmitting(false);
     }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { auth } from '@/lib/auth';
 import { authConfig } from '@/lib/auth.config';
 import { mockPosts, mockUsers, mockComments } from '@/lib/data';
 import { z } from 'zod';

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth.config';
+import { auth } from '@/lib/auth';
 import { revokeSession } from '@/lib/auth/session-manager';
 import { prisma } from '@/lib/prisma';
 import { log } from '@/lib/logger';
@@ -11,10 +10,10 @@ import { log } from '@/lib/logger';
  */
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { sessionId: string } }
+  props: { params: Promise<{ sessionId: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
 
     if (!session?.user?.email) {
       return NextResponse.json(
@@ -34,6 +33,7 @@ export async function DELETE(
       );
     }
 
+    const params = await props.params;
     const { sessionId } = params;
 
     const success = await revokeSession(sessionId, user.id);

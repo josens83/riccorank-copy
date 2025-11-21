@@ -12,7 +12,7 @@ export default function SubscribePage() {
   const { isDarkMode } = useThemeStore();
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { showToast } = useToast();
+  const { success: showSuccess, error: showError, info: showInfo } = useToast();
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -24,7 +24,7 @@ export default function SubscribePage() {
 
   const handleSubscribe = async (planId: string, amount: number, planName: string) => {
     if (!session) {
-      showToast('로그인이 필요합니다.', 'error');
+      showError('로그인이 필요합니다.');
       router.push('/login?callbackUrl=/subscribe');
       return;
     }
@@ -89,7 +89,7 @@ export default function SubscribePage() {
       const verifyData = await verifyResponse.json();
 
       if (verifyResponse.ok) {
-        showToast('구독이 완료되었습니다!', 'success');
+        showSuccess('구독이 완료되었습니다!');
         setTimeout(() => router.push('/mypage'), 2000);
       } else {
         throw new Error(verifyData.error || '결제 검증 실패');
@@ -97,14 +97,14 @@ export default function SubscribePage() {
       */
 
       // Development mode: simulate success
-      showToast('개발 모드: 결제가 시뮬레이션되었습니다.', 'info');
+      showInfo('개발 모드: 결제가 시뮬레이션되었습니다.');
       setTimeout(() => {
-        showToast('프로덕션에서는 실제 결제가 진행됩니다.', 'info');
+        showInfo('프로덕션에서는 실제 결제가 진행됩니다.');
       }, 2000);
 
     } catch (error: any) {
       console.error('Payment error:', error);
-      showToast(error.message || '결제 처리 중 오류가 발생했습니다.', 'error');
+      showError(error.message || '결제 처리 중 오류가 발생했습니다.');
     } finally {
       setIsProcessing(false);
       setSelectedPlan(null);

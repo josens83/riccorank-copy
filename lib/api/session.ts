@@ -5,8 +5,7 @@
  * scattered mock user IDs and inconsistent auth checks.
  */
 
-import { getServerSession } from 'next-auth';
-import { authConfig } from '../auth.config';
+import { auth } from '../auth';
 import { ApiErrors } from './errors';
 
 /**
@@ -29,7 +28,7 @@ export interface UserSession {
  */
 export async function getCurrentUser(required: boolean = false): Promise<UserSession | null> {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     // No session found
     if (!session || !session.user) {

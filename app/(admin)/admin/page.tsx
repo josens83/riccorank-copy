@@ -83,7 +83,7 @@ export default function AdminDashboard() {
   const { isDarkMode } = useThemeStore();
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { showToast } = useToast();
+  const { success: showSuccess, error: showError } = useToast();
   const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'posts' | 'comments' | 'reports'>('overview');
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [users, setUsers] = useState<User[]>([]);
@@ -124,7 +124,7 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.error('Failed to fetch stats:', error);
-      showToast('통계를 불러오는데 실패했습니다.', 'error');
+      showError('통계를 불러오는데 실패했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -165,7 +165,7 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.error('Failed to fetch tab data:', error);
-      showToast('데이터를 불러오는데 실패했습니다.', 'error');
+      showError('데이터를 불러오는데 실패했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -180,15 +180,15 @@ export default function AdminDashboard() {
       });
 
       if (response.ok) {
-        showToast('사용자 상태가 업데이트되었습니다.', 'success');
+        showSuccess('사용자 상태가 업데이트되었습니다.');
         fetchTabData();
       } else {
         const error = await response.json();
-        showToast(error.error || '작업 실패', 'error');
+        showError(error.error || '작업 실패');
       }
     } catch (error) {
       console.error('Failed to update user:', error);
-      showToast('사용자 업데이트 실패', 'error');
+      showError('사용자 업데이트 실패');
     }
   };
 
@@ -205,15 +205,15 @@ export default function AdminDashboard() {
       });
 
       if (response.ok) {
-        showToast('게시글이 삭제되었습니다.', 'success');
+        showSuccess('게시글이 삭제되었습니다.');
         fetchTabData();
       } else {
         const error = await response.json();
-        showToast(error.error || '삭제 실패', 'error');
+        showError(error.error || '삭제 실패');
       }
     } catch (error) {
       console.error('Failed to delete post:', error);
-      showToast('게시글 삭제 실패', 'error');
+      showError('게시글 삭제 실패');
     }
   };
 
@@ -230,15 +230,15 @@ export default function AdminDashboard() {
       });
 
       if (response.ok) {
-        showToast('댓글이 삭제되었습니다.', 'success');
+        showSuccess('댓글이 삭제되었습니다.');
         fetchTabData();
       } else {
         const error = await response.json();
-        showToast(error.error || '삭제 실패', 'error');
+        showError(error.error || '삭제 실패');
       }
     } catch (error) {
       console.error('Failed to delete comment:', error);
-      showToast('댓글 삭제 실패', 'error');
+      showError('댓글 삭제 실패');
     }
   };
 
@@ -251,15 +251,15 @@ export default function AdminDashboard() {
       });
 
       if (response.ok) {
-        showToast('신고 상태가 업데이트되었습니다.', 'success');
+        showSuccess('신고 상태가 업데이트되었습니다.');
         fetchTabData();
       } else {
         const error = await response.json();
-        showToast(error.error || '작업 실패', 'error');
+        showError(error.error || '작업 실패');
       }
     } catch (error) {
       console.error('Failed to update report:', error);
-      showToast('신고 업데이트 실패', 'error');
+      showError('신고 업데이트 실패');
     }
   };
 
