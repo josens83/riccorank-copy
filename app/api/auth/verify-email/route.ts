@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { authConfig } from '@/lib/auth.config';
 import { z } from 'zod';
 import crypto from 'crypto';
 import { sendVerificationEmail, sendWelcomeEmail } from '@/lib/external/email';
@@ -18,7 +17,7 @@ const mockVerificationTokens: Map<
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session) {
       return NextResponse.json(

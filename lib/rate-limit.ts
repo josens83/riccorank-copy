@@ -7,11 +7,11 @@ type RateLimiterType = 'api' | 'auth' | 'strict' | 'search' | 'payment';
 
 // Rate limit configurations
 const RATE_LIMIT_CONFIG: Record<RateLimiterType, { requests: number; window: string }> = {
-  api: { requests: 100, window: '1m' },      // 100 requests per minute
-  auth: { requests: 5, window: '15m' },      // 5 auth attempts per 15 minutes
-  strict: { requests: 10, window: '1m' },    // 10 requests per minute
-  search: { requests: 30, window: '1m' },    // 30 searches per minute
-  payment: { requests: 3, window: '1h' },    // 3 payment attempts per hour
+  api: { requests: 100, window: '1 m' },      // 100 requests per minute
+  auth: { requests: 5, window: '15 m' },      // 5 auth attempts per 15 minutes
+  strict: { requests: 10, window: '1 m' },    // 10 requests per minute
+  search: { requests: 30, window: '1 m' },    // 30 searches per minute
+  payment: { requests: 3, window: '1 h' },    // 3 payment attempts per hour
 };
 
 // Cache for rate limiters

@@ -82,6 +82,7 @@ export interface Comment {
   postId: string;
   parentId?: string;
   replies?: Comment[];
+  children?: Comment[]; // Alias for replies (used in some components)
   createdAt: Date;
   updatedAt: Date;
 }

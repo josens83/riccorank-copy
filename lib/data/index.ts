@@ -16,7 +16,7 @@ import type {
   User,
   Comment,
   Notification,
-} from '../types';
+} from '@/types/models';
 
 // Type-only imports to maintain type safety without bundling dev code in production
 type MockDataModule = {

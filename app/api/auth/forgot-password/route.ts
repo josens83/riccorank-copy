@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: '유효한 이메일 주소를 입력해주세요.', details: error.errors },
+        { error: '유효한 이메일 주소를 입력해주세요.', details: error.issues },
         { status: 400 }
       );
     }

@@ -106,7 +106,7 @@ export async function getUserSessions(userId: string) {
     },
   });
 
-  return sessions.map((session) => ({
+  return sessions.map((session: any) => ({
     id: session.id,
     deviceInfo: session.deviceInfo,
     ipAddress: session.ipAddress,
@@ -211,14 +211,14 @@ export async function getSessionStats(userId: string) {
     where: { userId },
   });
 
-  const activeSessions = sessions.filter((s) => s.expiresAt >= new Date());
-  const expiredSessions = sessions.filter((s) => s.expiresAt < new Date());
+  const activeSessions = sessions.filter((s: any) => s.expiresAt >= new Date());
+  const expiredSessions = sessions.filter((s: any) => s.expiresAt < new Date());
 
   return {
     total: sessions.length,
     active: activeSessions.length,
     expired: expiredSessions.length,
-    devices: [...new Set(sessions.map((s) => s.deviceInfo).filter(Boolean))],
+    devices: [...new Set(sessions.map((s: any) => s.deviceInfo).filter(Boolean))],
   };
 }
 

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { authConfig } from '@/lib/auth.config';
 import { mockComments, mockUsers, mockPosts } from '@/lib/data';
 import { z } from 'zod';
 
@@ -15,7 +14,7 @@ const deleteCommentSchema = z.object({
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session || session.user?.role !== 'admin') {
       return NextResponse.json(
@@ -98,7 +97,7 @@ export async function GET(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session || session.user?.role !== 'admin') {
       return NextResponse.json(
@@ -141,7 +140,7 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid request data', details: error.errors },
+        { error: 'Invalid request data', details: error.issues },
         { status: 400 }
       );
     }

@@ -129,28 +129,28 @@ export async function exportUserData(userId: string): Promise<UserDataExport> {
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
     },
-    posts: posts.map(p => ({
+    posts: posts.map((p: any) => ({
       ...p,
       createdAt: p.createdAt.toISOString(),
     })),
-    comments: comments.map(c => ({
+    comments: comments.map((c: any) => ({
       ...c,
       createdAt: c.createdAt.toISOString(),
     })),
-    likes: likes.map(l => ({
+    likes: likes.map((l: any) => ({
       ...l,
       createdAt: l.createdAt.toISOString(),
     })),
-    bookmarks: bookmarks.map(b => ({
+    bookmarks: bookmarks.map((b: any) => ({
       ...b,
       createdAt: b.createdAt.toISOString(),
     })),
-    sessions: sessions.map(s => ({
+    sessions: sessions.map((s: any) => ({
       ...s,
       lastActive: s.lastActive.toISOString(),
       createdAt: s.createdAt.toISOString(),
     })),
-    auditLogs: auditLogs.map(a => ({
+    auditLogs: auditLogs.map((a: any) => ({
       ...a,
       createdAt: a.createdAt.toISOString(),
     })),

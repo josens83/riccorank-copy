@@ -5,4 +5,4 @@
  */
 
 export { default as SessionProvider } from './SessionProvider';
-export { default as ErrorBoundary } from './ErrorBoundary';
+export { ErrorBoundary } from './ErrorBoundary';

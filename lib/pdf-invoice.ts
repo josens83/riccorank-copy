@@ -157,7 +157,7 @@ export function generateInvoicePDF(data: InvoiceData): jsPDF {
   doc.text(`Payment Method: ${data.paymentMethod}`, 20, yPos);
   yPos += 6;
 
-  const statusColor = data.paymentStatus === 'paid' ? [34, 197, 94] :
+  const statusColor: [number, number, number] = data.paymentStatus === 'paid' ? [34, 197, 94] :
                       data.paymentStatus === 'pending' ? [234, 179, 8] : [239, 68, 68];
   doc.setTextColor(...statusColor);
   doc.setFont('helvetica', 'bold');

@@ -1,6 +1,6 @@
 // Stock API Client using Yahoo Finance
 import yahooFinance from 'yahoo-finance2';
-import { Stock, MarketIndex } from './types';
+import { Stock, MarketIndex } from '@/types/models';
 
 /**
  * 한국 주식 종목 목록 (주요 종목)
@@ -56,7 +56,7 @@ function toYahooSymbol(symbol: string, market: 'KOSPI' | 'KOSDAQ'): string {
 export async function getStockQuote(symbol: string, market: 'KOSPI' | 'KOSDAQ'): Promise<Stock | null> {
   try {
     const yahooSymbol = toYahooSymbol(symbol, market);
-    const quote = await yahooFinance.quote(yahooSymbol);
+    const quote: any = await yahooFinance.quote(yahooSymbol);
 
     if (!quote || !quote.regularMarketPrice) {
       console.error(`No data for ${yahooSymbol}`);
@@ -64,7 +64,7 @@ export async function getStockQuote(symbol: string, market: 'KOSPI' | 'KOSDAQ'):
     }
 
     // 재무 데이터 조회 (선택적)
-    let financialData = null;
+    let financialData: any = null;
     try {
       financialData = await yahooFinance.quoteSummary(yahooSymbol, {
         modules: ['defaultKeyStatistics', 'financialData']
@@ -81,15 +81,15 @@ export async function getStockQuote(symbol: string, market: 'KOSPI' | 'KOSDAQ'):
       currentPrice: quote.regularMarketPrice || 0,
       change: quote.regularMarketChange || 0,
       changePercent: quote.regularMarketChangePercent || 0,
-      volume: BigInt(quote.regularMarketVolume || 0),
-      marketCap: quote.marketCap ? BigInt(Math.floor(quote.marketCap / 100000000)) : null, // 억원 단위
-      sales: null,
-      operatingIncome: null,
-      netIncome: null,
-      per: financialData?.defaultKeyStatistics?.forwardPE ?? null,
-      pbr: financialData?.defaultKeyStatistics?.priceToBook ?? null,
-      score: null,
-      rank: null,
+      volume: Number(quote.regularMarketVolume || 0),
+      marketCap: quote.marketCap ? Math.floor(quote.marketCap / 100000000) : undefined, // 억원 단위
+      sales: undefined,
+      operatingIncome: undefined,
+      netIncome: undefined,
+      per: financialData?.defaultKeyStatistics?.forwardPE ?? undefined,
+      pbr: financialData?.defaultKeyStatistics?.priceToBook ?? undefined,
+      score: undefined,
+      rank: undefined,
       updatedAt: new Date(),
     };
 
@@ -171,7 +171,7 @@ export async function getMarketIndices(): Promise<MarketIndex[]> {
     const results = await Promise.all(
       indices.map(async (index) => {
         try {
-          const quote = await yahooFinance.quote(index.symbol);
+          const quote: any = await yahooFinance.quote(index.symbol);
 
           return {
             id: index.displaySymbol,

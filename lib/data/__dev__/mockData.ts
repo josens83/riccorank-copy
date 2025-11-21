@@ -11,70 +11,7 @@ import {
   User,
   Comment,
   Notification,
-} from './types';
-
-/**
- * Mock Users for Development
- * Used for authentication and authorization testing
- */
-export const mockUsers: User[] = [
-  {
-    id: '1',
-    email: 'admin@rankup.com',
-    name: '관리자',
-    role: 'admin',
-    suspended: false,
-    emailVerified: true,
-    provider: 'credentials',
-    createdAt: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // 1 year ago
-    updatedAt: new Date(),
-  },
-  {
-    id: '2',
-    email: 'user@test.com',
-    name: '테스트 유저',
-    role: 'user',
-    suspended: false,
-    emailVerified: true,
-    provider: 'credentials',
-    createdAt: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months ago
-    updatedAt: new Date(),
-  },
-  {
-    id: '3',
-    email: 'john@example.com',
-    name: 'John Doe',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=john',
-    role: 'user',
-    suspended: false,
-    emailVerified: true,
-    provider: 'google',
-    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
-    updatedAt: new Date(),
-  },
-  {
-    id: '4',
-    email: 'suspended@test.com',
-    name: '정지된 사용자',
-    role: 'user',
-    suspended: true,
-    emailVerified: true,
-    provider: 'credentials',
-    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 2 months ago
-    updatedAt: new Date(),
-  },
-  {
-    id: '5',
-    email: 'unverified@test.com',
-    name: '미인증 사용자',
-    role: 'user',
-    suspended: false,
-    emailVerified: false,
-    provider: 'credentials',
-    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 week ago
-    updatedAt: new Date(),
-  },
-];
+} from '@/types/models';
 
 export const mockPopularSearches: PopularSearch[] = [
   { rank: 1, symbol: '005930', name: '삼성SDI', code: '006400', change: 3000, changePercent: 0.95 },
@@ -497,6 +434,7 @@ export const mockUsers: User[] = [
     name: '관리자',
     role: 'admin',
     suspended: false,
+    emailVerified: true,
     provider: 'credentials',
     createdAt: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // 1 year ago
     updatedAt: new Date(),
@@ -507,6 +445,7 @@ export const mockUsers: User[] = [
     name: '김투자',
     role: 'user',
     suspended: false,
+    emailVerified: true,
     provider: 'credentials',
     createdAt: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months ago
     updatedAt: new Date(),
@@ -517,6 +456,7 @@ export const mockUsers: User[] = [
     name: '이주식',
     role: 'user',
     suspended: false,
+    emailVerified: true,
     provider: 'google',
     image: 'https://lh3.googleusercontent.com/a/default-user',
     createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
@@ -528,6 +468,7 @@ export const mockUsers: User[] = [
     name: '박분석',
     role: 'user',
     suspended: false,
+    emailVerified: true,
     provider: 'credentials',
     createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 1 month ago
     updatedAt: new Date(),
@@ -538,6 +479,7 @@ export const mockUsers: User[] = [
     name: '정스팸',
     role: 'user',
     suspended: true,
+    emailVerified: true,
     provider: 'credentials',
     createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 2 months ago
     updatedAt: new Date(),

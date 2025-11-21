@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useThemeStore } from '@/lib/store';
 import { FiX, FiAlertTriangle } from 'react-icons/fi';
-import { useToast } from './Toast';
+import { useToast } from '@/components/shared/Toast';
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ const reportReasons = [
 
 export default function ReportModal({ isOpen, onClose, type, targetId, targetTitle }: ReportModalProps) {
   const { isDarkMode } = useThemeStore();
-  const { showToast } = useToast();
+  const { success: showSuccess, error: showError } = useToast();
   const [selectedReason, setSelectedReason] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,7 +34,7 @@ export default function ReportModal({ isOpen, onClose, type, targetId, targetTit
     e.preventDefault();
 
     if (!selectedReason) {
-      showToast('신고 사유를 선택해주세요.', 'error');
+      showError('신고 사유를 선택해주세요.');
       return;
     }
 
@@ -55,16 +55,16 @@ export default function ReportModal({ isOpen, onClose, type, targetId, targetTit
       const data = await response.json();
 
       if (response.ok) {
-        showToast(data.message || '신고가 접수되었습니다.', 'success');
+        showSuccess(data.message || '신고가 접수되었습니다.');
         onClose();
         setSelectedReason('');
         setDescription('');
       } else {
-        showToast(data.error || '신고 접수에 실패했습니다.', 'error');
+        showError(data.error || '신고 접수에 실패했습니다.');
       }
     } catch (error) {
       console.error('Failed to submit report:', error);
-      showToast('신고 접수 중 오류가 발생했습니다.', 'error');
+      showError('신고 접수 중 오류가 발생했습니다.');
     } finally {
       setIsSubmitting(false);
     }

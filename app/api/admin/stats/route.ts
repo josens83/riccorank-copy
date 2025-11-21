@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { authConfig } from '@/lib/auth.config';
 import { mockUsers, mockPosts, mockComments } from '@/lib/data';
 
 /**
@@ -9,7 +8,7 @@ import { mockUsers, mockPosts, mockComments } from '@/lib/data';
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     // Check admin role
     if (!session || session.user?.role !== 'admin') {

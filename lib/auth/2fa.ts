@@ -1,5 +1,6 @@
 import speakeasy from 'speakeasy';
 import QRCode from 'qrcode';
+import { randomInt } from 'crypto';
 
 /**
  * Generate a new 2FA secret for a user
@@ -71,16 +72,9 @@ function generateSecureCode(length: number): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Exclude confusing characters
   let code = '';
 
-  // Use crypto.randomInt for secure random generation
-  if (typeof crypto !== 'undefined' && crypto.randomInt) {
-    for (let i = 0; i < length; i++) {
-      code += chars[crypto.randomInt(0, chars.length)];
-    }
-  } else {
-    // Fallback for environments without crypto.randomInt
-    for (let i = 0; i < length; i++) {
-      code += chars[Math.floor(Math.random() * chars.length)];
-    }
+  // Use Node.js crypto.randomInt for secure random generation
+  for (let i = 0; i < length; i++) {
+    code += chars[randomInt(0, chars.length)];
   }
 
   return code;
