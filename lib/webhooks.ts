@@ -130,7 +130,7 @@ class WebhookService {
    */
   verifySignature(payload: string, signature: string, secret: string): boolean {
     const expected = this.generateSignature(payload, secret);
-    return crypto.timingSafeEquals(
+    return crypto.timingSafeEqual(
       Buffer.from(signature),
       Buffer.from(expected)
     );
