@@ -7,7 +7,7 @@ import { sendVerificationEmail } from '@/lib/external/email';
 import { mockUsers } from '@/lib/data';
 
 // Mock storage for email verification tokens (in real app, use database)
-export const mockVerificationTokens: Map<
+const mockVerificationTokens: Map<
   string,
   { email: string; userId: string; token: string; expiresAt: Date }
 > = new Map();

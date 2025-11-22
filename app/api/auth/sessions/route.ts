@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth.config';
+import { auth } from '@/lib/auth';
 import { getUserSessions, revokeAllSessionsExcept } from '@/lib/auth/session-manager';
 import { prisma } from '@/lib/prisma';
 import { log } from '@/lib/logger';
@@ -11,7 +10,7 @@ import { log } from '@/lib/logger';
  */
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await await auth();
 
     if (!session?.user?.email) {
       return NextResponse.json(
@@ -49,7 +48,7 @@ export async function GET(req: NextRequest) {
  */
 export async function DELETE(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await await auth();
 
     if (!session?.user?.email) {
       return NextResponse.json(

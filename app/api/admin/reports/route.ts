@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authConfig } from '@/lib/auth.config';
+import { auth } from '@/lib/auth';
 import { mockUsers, mockPosts, mockComments } from '@/lib/data';
 import { z } from 'zod';
 
@@ -20,7 +19,7 @@ const updateReportSchema = z.object({
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session || session.user?.role !== 'admin') {
       return NextResponse.json(
@@ -118,7 +117,7 @@ export async function GET(request: NextRequest) {
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session || session.user?.role !== 'admin') {
       return NextResponse.json(
@@ -165,7 +164,7 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid request data', details: error.errors },
+        { error: 'Invalid request data', details: error.issues },
         { status: 400 }
       );
     }
@@ -184,7 +183,7 @@ export async function PATCH(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session || session.user?.role !== 'admin') {
       return NextResponse.json(

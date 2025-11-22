@@ -80,7 +80,11 @@ function CommentItem({ comment, onReply, onDelete, userId }: {
   );
 }
 
-export default function PostDetailPage({ params }: { params: { id: string } }) {
+interface PostDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function PostDetailPage({ params }: PostDetailPageProps) {
   const { isDarkMode } = useThemeStore();
   const router = useRouter();
   const { data: session } = useSession();
@@ -93,18 +97,24 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
   const [commentContent, setCommentContent] = useState('');
   const [replyToId, setReplyToId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [postId, setPostId] = useState<string>('');
 
   useEffect(() => {
+    params.then(p => setPostId(p.id));
+  }, [params]);
+
+  useEffect(() => {
+    if (!postId) return;
     fetchPost();
     fetchComments();
     if (session?.user) {
       checkIfLiked();
     }
-  }, [params.id, session]);
+  }, [postId, session]);
 
   const fetchPost = async () => {
     try {
-      const response = await fetch(`/api/posts/${params.id}`);
+      const response = await fetch(`/api/posts/${postId}`);
       if (!response.ok) throw new Error('게시글을 불러올 수 없습니다');
       const data = await response.json();
       setPost(data);
@@ -118,7 +128,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`/api/comments?postId=${params.id}`);
+      const response = await fetch(`/api/comments?postId=${postId}`);
       if (!response.ok) throw new Error('댓글을 불러올 수 없습니다');
       const data = await response.json();
       setComments(data);
@@ -129,7 +139,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
 
   const checkIfLiked = async () => {
     try {
-      const response = await fetch(`/api/likes?postId=${params.id}`);
+      const response = await fetch(`/api/likes?postId=${postId}`);
       if (response.ok) {
         const data = await response.json();
         setIsLiked(data.isLiked || false);
@@ -141,7 +151,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
 
   const handleLike = async () => {
     if (!session?.user) {
-      router.push('/login?callbackUrl=/stockboard/' + params.id);
+      router.push('/login?callbackUrl=/stockboard/' + postId);
       return;
     }
 
@@ -150,7 +160,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
         const response = await fetch('/api/likes', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ postId: params.id }),
+          body: JSON.stringify({ postId: postId }),
         });
         if (response.ok) {
           setIsLiked(false);
@@ -160,7 +170,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
         const response = await fetch('/api/likes', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ postId: params.id }),
+          body: JSON.stringify({ postId: postId }),
         });
         if (response.ok) {
           setIsLiked(true);
@@ -175,7 +185,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session?.user) {
-      router.push('/login?callbackUrl=/stockboard/' + params.id);
+      router.push('/login?callbackUrl=/stockboard/' + postId);
       return;
     }
 
@@ -185,7 +195,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          postId: params.id,
+          postId: postId,
           content: commentContent,
           parentId: replyToId,
         }),
@@ -223,7 +233,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
     if (!confirm('게시글을 삭제하시겠습니까?')) return;
 
     try {
-      const response = await fetch(`/api/posts/${params.id}`, {
+      const response = await fetch(`/api/posts/${postId}`, {
         method: 'DELETE',
       });
 

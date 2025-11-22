@@ -12,7 +12,7 @@ export default function EditProfilePage() {
   const { isDarkMode } = useThemeStore();
   const { data: session, status, update } = useSession();
   const router = useRouter();
-  const { showToast } = useToast();
+  const { success: showSuccess, error: showError } = useToast();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -52,7 +52,7 @@ export default function EditProfilePage() {
       const data = await response.json();
 
       if (response.ok) {
-        showToast(data.message, 'success');
+        showSuccess(data.message);
 
         // Update session
         await update({
@@ -67,11 +67,11 @@ export default function EditProfilePage() {
 
         setTimeout(() => router.push('/mypage'), 1000);
       } else {
-        showToast(data.error || '프로필 업데이트에 실패했습니다.', 'error');
+        showError(data.error || '프로필 업데이트에 실패했습니다.');
       }
     } catch (error) {
       console.error('Profile update error:', error);
-      showToast('오류가 발생했습니다.', 'error');
+      showError('오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -81,7 +81,7 @@ export default function EditProfilePage() {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      showToast('비밀번호가 일치하지 않습니다.', 'error');
+      showError('비밀번호가 일치하지 않습니다.');
       return;
     }
 
@@ -97,17 +97,17 @@ export default function EditProfilePage() {
       const data = await response.json();
 
       if (response.ok) {
-        showToast(data.message, 'success');
+        showSuccess(data.message);
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
         setShowPasswordSection(false);
       } else {
-        showToast(data.error || '비밀번호 변경에 실패했습니다.', 'error');
+        showError(data.error || '비밀번호 변경에 실패했습니다.');
       }
     } catch (error) {
       console.error('Password change error:', error);
-      showToast('오류가 발생했습니다.', 'error');
+      showError('오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
@@ -123,7 +123,7 @@ export default function EditProfilePage() {
     );
   }
 
-  const isOAuthUser = session?.user?.provider === 'google';
+  const isOAuthUser = (session?.user as any)?.provider === 'google';
 
   return (
     <main className={`min-h-screen py-8 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
@@ -257,13 +257,13 @@ export default function EditProfilePage() {
             </div>
 
             {/* Provider info */}
-            {session?.user?.provider && (
+            {(session?.user as any)?.provider && (
               <div className={`p-4 rounded-lg ${
                 isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
               }`}>
                 <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                   <strong>연결된 계정:</strong>{' '}
-                  {session.user.provider === 'google' ? 'Google' : '이메일'}
+                  {(session?.user as any).provider === 'google' ? 'Google' : '이메일'}
                 </p>
               </div>
             )}

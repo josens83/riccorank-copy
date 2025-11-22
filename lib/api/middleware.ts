@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authConfig } from '../auth.config';
+import { auth } from '@/lib/auth';
 import { apiRateLimiter, authRateLimiter, getClientIdentifier, SECURITY_HEADERS } from '../utils/security';
 import { handleApiError, successResponse } from './errors';
 
@@ -57,7 +56,7 @@ export async function withAuth(
   request: NextRequest
 ): Promise<{ authenticated: boolean; session?: any; response?: NextResponse }> {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session || !session.user) {
       return {

@@ -1,5 +1,5 @@
 // News API Client using Naver News API
-import { News } from './types';
+import { News } from '@/types/models';
 
 const NAVER_CLIENT_ID = process.env.NAVER_CLIENT_ID;
 const NAVER_CLIENT_SECRET = process.env.NAVER_CLIENT_SECRET;
@@ -71,10 +71,10 @@ export async function searchNaverNews(
       summary: stripHtml(item.description).substring(0, 100) + '...',
       source: '네이버 뉴스',
       url: item.originallink || item.link,
-      imageUrl: null,
+      imageUrl: undefined,
       isHot: index < 3, // 상위 3개는 핫 뉴스로 표시
       category: '국내',
-      tags: null,
+      tags: undefined,
       views: 0,
       publishedAt: new Date(item.pubDate),
       createdAt: new Date(),

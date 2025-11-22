@@ -29,8 +29,7 @@ export const prisma = globalForPrisma.prisma || new PrismaClient(prismaClientOpt
 
 // 개발 환경에서 쿼리 로깅
 if (process.env.NODE_ENV === 'development') {
-  // @ts-expect-error - Prisma event types
-  prisma.$on('query', (e: { query: string; params: string; duration: number }) => {
+  prisma.$on('query', (e: any) => {
     log.debug('Prisma Query', {
       query: e.query,
       params: e.params,
@@ -39,13 +38,11 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-// @ts-expect-error - Prisma event types
-prisma.$on('error', (e: { message: string }) => {
+prisma.$on('error', (e: any) => {
   log.error('Prisma Error', new Error(e.message));
 });
 
-// @ts-expect-error - Prisma event types
-prisma.$on('warn', (e: { message: string }) => {
+prisma.$on('warn', (e: any) => {
   log.warn('Prisma Warning', { message: e.message });
 });
 

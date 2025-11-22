@@ -5,9 +5,10 @@ import { mockStocks } from '@/lib/data';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { symbol: string } }
+  props: { params: Promise<{ symbol: string }> }
 ) {
   try {
+    const params = await props.params;
     const { symbol } = stockSymbolSchema.parse(params);
 
     const stock = mockStocks.find((s) => s.symbol === symbol);

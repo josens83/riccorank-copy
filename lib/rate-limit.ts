@@ -1,4 +1,4 @@
-import { Ratelimit } from '@upstash/ratelimit';
+import { Ratelimit, type Duration } from '@upstash/ratelimit';
 import { getRedis } from '@/lib/redis';
 import { log } from '@/lib/logger';
 
@@ -6,13 +6,13 @@ import { log } from '@/lib/logger';
 type RateLimiterType = 'api' | 'auth' | 'strict' | 'search' | 'payment';
 
 // Rate limit configurations
-const RATE_LIMIT_CONFIG: Record<RateLimiterType, { requests: number; window: string }> = {
-  api: { requests: 100, window: '1m' },      // 100 requests per minute
-  auth: { requests: 5, window: '15m' },      // 5 auth attempts per 15 minutes
-  strict: { requests: 10, window: '1m' },    // 10 requests per minute
-  search: { requests: 30, window: '1m' },    // 30 searches per minute
-  payment: { requests: 3, window: '1h' },    // 3 payment attempts per hour
-};
+const RATE_LIMIT_CONFIG: Record<RateLimiterType, { requests: number; window: Duration }> = {
+  api: { requests: 100, window: '1 m' },      // 100 requests per minute
+  auth: { requests: 5, window: '15 m' },      // 5 auth attempts per 15 minutes
+  strict: { requests: 10, window: '1 m' },    // 10 requests per minute
+  search: { requests: 30, window: '1 m' },    // 30 searches per minute
+  payment: { requests: 3, window: '1 h' },    // 3 payment attempts per hour
+} as const;
 
 // Cache for rate limiters
 const rateLimiters = new Map<RateLimiterType, Ratelimit>();

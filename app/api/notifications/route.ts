@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authConfig } from '@/lib/auth.config';
+import { auth } from '@/lib/auth';
 import { mockNotifications } from '@/lib/data';
 import { z } from 'zod';
 
@@ -10,7 +9,7 @@ import { z } from 'zod';
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized - Login required' }, { status: 401 });
@@ -66,7 +65,7 @@ const markAsReadSchema = z.object({
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized - Login required' }, { status: 401 });
@@ -115,7 +114,7 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid request data', details: error.errors },
+        { error: 'Invalid request data', details: error.issues },
         { status: 400 }
       );
     }
@@ -134,7 +133,7 @@ export async function PATCH(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized - Login required' }, { status: 401 });

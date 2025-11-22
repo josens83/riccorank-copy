@@ -19,6 +19,12 @@ export interface EmailData {
   subject: string;
   html: string;
   text?: string;
+  attachments?: Array<{
+    filename: string;
+    content: string;
+    encoding?: string;
+    type?: string;
+  }>;
 }
 
 /**
@@ -45,6 +51,7 @@ export async function sendEmail(data: EmailData): Promise<boolean> {
       subject: data.subject,
       html: data.html,
       text: data.text,
+      attachments: data.attachments as any,
     });
 
     console.log(`✅ Email sent to ${data.to}: ${data.subject}`);

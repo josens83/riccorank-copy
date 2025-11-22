@@ -8,9 +8,10 @@ let posts = [...mockPosts];
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await props.params;
     const { id } = params;
 
     const post = posts.find((p) => p.id === id);
@@ -30,9 +31,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await props.params;
     const { id } = params;
     const body = await request.json();
     const data = updatePostSchema.parse(body);
@@ -61,9 +63,10 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await props.params;
     const { id } = params;
 
     const postIndex = posts.findIndex((p) => p.id === id);

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authConfig } from '@/lib/auth.config';
+import { auth } from '@/lib/auth';
 import { mockUsers } from '@/lib/data';
 import { z } from 'zod';
 import bcrypt from 'bcrypt';
@@ -31,7 +30,7 @@ const changePasswordSchema = z.object({
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session) {
       return NextResponse.json(
@@ -80,7 +79,7 @@ export async function GET(request: NextRequest) {
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session) {
       return NextResponse.json(
@@ -136,7 +135,7 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: error.errors[0].message, details: error.errors },
+        { error: error.issues[0].message, details: error.issues },
         { status: 400 }
       );
     }
@@ -155,7 +154,7 @@ export async function PATCH(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session) {
       return NextResponse.json(
@@ -203,7 +202,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: error.errors[0].message, details: error.errors },
+        { error: error.issues[0].message, details: error.issues },
         { status: 400 }
       );
     }
