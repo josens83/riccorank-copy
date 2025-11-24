@@ -46,6 +46,14 @@ const customJestConfig = {
     '**/?(*.)+(spec|test).[jt]s?(x)',
   ],
 
+  // Ignore E2E tests (run separately with Playwright)
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/.next/',
+    '/e2e/',
+    '/playwright-report/',
+  ],
+
   // Transform ignore patterns
   transformIgnorePatterns: [
     'node_modules/(?!(uuid|@sendgrid)/)',
