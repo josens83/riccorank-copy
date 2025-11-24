@@ -1,165 +1,85 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { Blurhash } from 'react-blurhash';
 
 interface OptimizedImageProps {
   src: string;
   alt: string;
-  width?: number;
-  height?: number;
-  className?: string;
+  width: number;
+  height: number;
+  blurhash?: string;
   priority?: boolean;
-  fill?: boolean;
-  sizes?: string;
-  quality?: number;
-  placeholder?: 'blur' | 'empty';
-  blurDataURL?: string;
+  className?: string;
 }
 
 /**
- * Optimized Image component wrapper around Next.js Image
- * Provides automatic image optimization, lazy loading, and responsive images
+ * Optimized Image Component
+ * 
+ * Features:
+ * - Blurhash placeholder
+ * - Progressive loading
+ * - Lazy loading (unless priority)
+ * - Next.js Image optimization
  */
-export default function OptimizedImage({
+export function OptimizedImage({
   src,
   alt,
   width,
   height,
-  className = '',
+  blurhash,
   priority = false,
-  fill = false,
-  sizes,
-  quality = 75,
-  placeholder = 'empty',
-  blurDataURL,
+  className = '',
 }: OptimizedImageProps) {
-  // Handle external images
-  const isExternal = src.startsWith('http://') || src.startsWith('https://');
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  if (fill) {
-    return (
+  // Default blurhash for fallback
+  const defaultBlurhash = 'LEHV6nWB2yk8pyo0adR*.7kCMdnj';
+
+  return (
+    <div
+      className={`relative overflow-hidden ${className}`}
+      style={{ width, height }}
+    >
+      {/* Blurhash Placeholder */}
+      {!isLoaded && !isError && blurhash && (
+        <Blurhash
+          hash={blurhash || defaultBlurhash}
+          width={width}
+          height={height}
+          resolutionX={32}
+          resolutionY={32}
+          punch={1}
+        />
+      )}
+
+      {/* Optimized Image */}
       <Image
         src={src}
         alt={alt}
-        fill
-        className={className}
+        width={width}
+        height={height}
         priority={priority}
-        sizes={sizes || '100vw'}
-        quality={quality}
-        placeholder={placeholder}
-        blurDataURL={blurDataURL}
+        loading={priority ? undefined : 'lazy'}
+        quality={90}
+        className={`transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => {
+          setIsError(true);
+          console.error(`Failed to load image: ${src}`);
+        }}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
-    );
-  }
 
-  if (!width || !height) {
-    console.warn('OptimizedImage: width and height are required when fill is false');
-    return null;
-  }
-
-  return (
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      priority={priority}
-      sizes={sizes}
-      quality={quality}
-      placeholder={placeholder}
-      blurDataURL={blurDataURL}
-      {...(isExternal && { unoptimized: true })}
-    />
-  );
-}
-
-/**
- * Avatar component with optimized image loading
- */
-export function OptimizedAvatar({
-  src,
-  alt,
-  size = 40,
-  className = '',
-}: {
-  src?: string;
-  alt: string;
-  size?: number;
-  className?: string;
-}) {
-  if (!src) {
-    return (
-      <div
-        className={`flex items-center justify-center bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold ${className}`}
-        style={{ width: size, height: size }}
-      >
-        {alt[0]?.toUpperCase() || '?'}
-      </div>
-    );
-  }
-
-  return (
-    <OptimizedImage
-      src={src}
-      alt={alt}
-      width={size}
-      height={size}
-      className={`object-cover ${className}`}
-      quality={60}
-    />
-  );
-}
-
-/**
- * Logo component with optimized loading
- */
-export function OptimizedLogo({
-  width = 200,
-  height = 50,
-  priority = true,
-}: {
-  width?: number;
-  height?: number;
-  priority?: boolean;
-}) {
-  return (
-    <OptimizedImage
-      src="/logo.png"
-      alt="RANKUP Logo"
-      width={width}
-      height={height}
-      priority={priority}
-      quality={90}
-    />
-  );
-}
-
-/**
- * Background image with blur effect
- */
-export function OptimizedBackground({
-  src,
-  alt = 'Background',
-  className = '',
-  overlay = false,
-}: {
-  src: string;
-  alt?: string;
-  className?: string;
-  overlay?: boolean;
-}) {
-  return (
-    <div className={`relative ${className}`}>
-      <OptimizedImage
-        src={src}
-        alt={alt}
-        fill
-        className="object-cover"
-        priority
-        quality={60}
-        sizes="100vw"
-      />
-      {overlay && (
-        <div className="absolute inset-0 bg-black/50" />
+      {/* Error Fallback */}
+      {isError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+          <span className="text-gray-500">이미지를 불러올 수 없습니다</span>
+        </div>
       )}
     </div>
   );
