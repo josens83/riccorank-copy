@@ -3,7 +3,7 @@ import { handleApiError, successResponse, ApiError } from '@/lib/api/errors';
 import { createCommentSchema } from '@/lib/utils/validations';
 
 // In-memory storage for comments
-let comments: any[] = [
+const comments: any[] = [
   {
     id: '1',
     content: '좋은 분석 감사합니다!',

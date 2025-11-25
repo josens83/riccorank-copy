@@ -4,7 +4,7 @@ import { bookmarkSchema } from '@/lib/utils/validations';
 import { mockStocks } from '@/lib/data';
 
 // In-memory storage for bookmarks
-let bookmarks: Array<{ id: string; userId: string; stockId: string; createdAt: Date }> = [];
+const bookmarks: Array<{ id: string; userId: string; stockId: string; createdAt: Date }> = [];
 
 export async function GET(request: NextRequest) {
   try {

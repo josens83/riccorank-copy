@@ -4,7 +4,7 @@ import { updatePostSchema } from '@/lib/utils/validations';
 import { mockPosts } from '@/lib/data';
 
 // In-memory storage (same reference as in posts/route.ts)
-let posts = [...mockPosts];
+const posts = [...mockPosts];
 
 export async function GET(
   request: NextRequest,

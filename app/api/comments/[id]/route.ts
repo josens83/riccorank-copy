@@ -3,7 +3,7 @@ import { handleApiError, successResponse, ApiError } from '@/lib/api/errors';
 import { updateCommentSchema } from '@/lib/utils/validations';
 
 // Mock comments (should match comments/route.ts)
-let comments: any[] = [];
+const comments: any[] = [];
 
 export async function PATCH(
   request: NextRequest,

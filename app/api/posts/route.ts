@@ -4,7 +4,7 @@ import { getPostsSchema, createPostSchema } from '@/lib/utils/validations';
 import { mockPosts } from '@/lib/data';
 
 // In-memory storage for new posts (in real app, use database)
-let posts = [...mockPosts];
+const posts = [...mockPosts];
 
 export async function GET(request: NextRequest) {
   try {

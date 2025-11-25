@@ -16,14 +16,14 @@ export default function VerifyEmailPage() {
   useEffect(() => {
     const token = searchParams.get('token');
 
-    if (!token) {
-      setStatus('error');
-      setMessage('유효하지 않은 인증 링크입니다.');
-      return;
-    }
-
     // Verify email with token
     const verifyEmail = async () => {
+      if (!token) {
+        setStatus('error');
+        setMessage('유효하지 않은 인증 링크입니다.');
+        return;
+      }
+
       try {
         const response = await fetch(`/api/auth/verify-email?token=${token}`);
         const data = await response.json();
