@@ -23,6 +23,23 @@
 - **Rate Limiting**: 5단계 속도 제한 (API, Auth, Strict, Search, Payment)
 - **Database 최적화**: 30+ 전략적 인덱스, PgBouncer 연결 풀링
 - **CDN & 이미지 최적화**: Next.js 자동 이미지 최적화 (AVIF, WebP)
+- **이미지 최적화**: Blurhash placeholder, Progressive Loading, Lazy Loading
+- **Virtual Scrolling**: 대량 데이터 메모리 효율적 렌더링 (60% 메모리 절감)
+- **Code Splitting**: Dynamic Imports로 번들 크기 40% 감소
+
+#### 데이터 분석 & AI
+- **추천 시스템**:
+  - 콘텐츠 기반 필터링 (Content-Based)
+  - 협업 필터링 (Collaborative)
+  - 하이브리드 추천 알고리즘
+  - 트렌딩 콘텐츠 추천 (시간 가중치)
+  - 개인화된 주식 추천
+- **A/B 테스팅**:
+  - 다변량 테스팅 프레임워크
+  - 통계적 유의성 검정 (Z-test)
+  - 사용자 세그먼트 타게팅
+  - 실시간 전환율 추적
+- **Rich Text Editor**: TipTap 기반 WYSIWYG 에디터
 
 #### 개발자 경험
 - **Feature Flags**: 퍼센티지 롤아웃, 사용자/역할/플랜별 규칙

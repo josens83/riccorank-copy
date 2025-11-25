@@ -1,17 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getSwaggerSpec } from '@/lib/swagger';
+import { openAPISchema } from '@/lib/api/openapi-schema';
 
 /**
  * GET /api/docs
- * Returns OpenAPI specification JSON
+ * OpenAPI 3.0 스키마 반환
  */
 export async function GET() {
-  const spec = getSwaggerSpec();
-
-  return NextResponse.json(spec, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-  });
+  return NextResponse.json(openAPISchema);
 }

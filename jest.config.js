@@ -30,6 +30,12 @@ const customJestConfig = {
     '!**/jest.config.js',
   ],
 
+  // Coverage reporters
+  coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
+
+  // Coverage directory
+  coverageDirectory: 'coverage',
+
   // Coverage thresholds
   coverageThreshold: {
     global: {
