@@ -110,7 +110,7 @@ describe('Auth API', () => {
 
     it('should lock account after max attempts', () => {
       const maxAttempts = 5;
-      let attempts = 6;
+      const attempts = 6;
 
       expect(attempts).toBeGreaterThan(maxAttempts);
     });

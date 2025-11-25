@@ -38,13 +38,7 @@ export default function MyPage() {
     email: '',
   });
   const [isResendingEmail, setIsResendingEmail] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(true); // Will be fetched from user data
-
-  // Redirect if not authenticated
-  if (status === 'unauthenticated') {
-    router.push('/login?callbackUrl=/mypage');
-    return null;
-  }
+  const [emailVerified, setEmailVerified] = useState(true);
 
   useEffect(() => {
     if (session?.user) {
@@ -55,6 +49,25 @@ export default function MyPage() {
       fetchUserData();
     }
   }, [session, activeTab]);
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login?callbackUrl=/mypage');
+    }
+  }, [status, router]);
+
+  if (status === 'loading' || status === 'unauthenticated') {
+    return (
+      <main className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className={`text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            로딩 중...
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   const fetchUserData = async () => {
     setIsLoading(true);
@@ -186,18 +199,6 @@ export default function MyPage() {
     };
     return labels[category] || category;
   };
-
-  if (status === 'loading') {
-    return (
-      <main className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className={`text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-            로딩 중...
-          </div>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>

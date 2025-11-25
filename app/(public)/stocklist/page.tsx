@@ -9,6 +9,21 @@ import Link from 'next/link';
 type SortField = 'rank' | 'name' | 'currentPrice' | 'changePercent' | 'marketCap' | 'sales' | 'operatingIncome' | 'netIncome' | 'per' | 'pbr';
 type SortDirection = 'asc' | 'desc';
 
+interface SortIconProps {
+  field: SortField;
+  sortField: SortField;
+  sortDirection: SortDirection;
+}
+
+const SortIcon = ({ field, sortField, sortDirection }: SortIconProps) => {
+  if (sortField !== field) return null;
+  return sortDirection === 'asc' ? (
+    <FiChevronUp className="inline w-3 h-3 ml-1" />
+  ) : (
+    <FiChevronDown className="inline w-3 h-3 ml-1" />
+  );
+};
+
 export default function StockListPage() {
   const { isDarkMode } = useThemeStore();
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,15 +68,6 @@ export default function StockListPage() {
       return aVal < bVal ? 1 : -1;
     }
   });
-
-  const SortIcon = ({ field }: { field: SortField }) => {
-    if (sortField !== field) return null;
-    return sortDirection === 'asc' ? (
-      <FiChevronUp className="inline w-3 h-3 ml-1" />
-    ) : (
-      <FiChevronDown className="inline w-3 h-3 ml-1" />
-    );
-  };
 
   return (
     <main className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
@@ -135,7 +141,7 @@ export default function StockListPage() {
                     className={`px-4 py-3 text-right text-sm font-semibold cursor-pointer hover:bg-gray-700/20 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
                     onClick={() => handleSort('currentPrice')}
                   >
-                    현재가 <SortIcon field="currentPrice" />
+                    현재가 <SortIcon field="currentPrice" sortField={sortField} sortDirection={sortDirection} />
                   </th>
                   <th className={`px-4 py-3 text-center text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                     점수 ⓘ ▽
@@ -144,37 +150,37 @@ export default function StockListPage() {
                     className={`px-4 py-3 text-right text-sm font-semibold cursor-pointer hover:bg-gray-700/20 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
                     onClick={() => handleSort('marketCap')}
                   >
-                    시가총액(억) ⓘ <SortIcon field="marketCap" />
+                    시가총액(억) ⓘ <SortIcon field="marketCap" sortField={sortField} sortDirection={sortDirection} />
                   </th>
                   <th
                     className={`px-4 py-3 text-right text-sm font-semibold cursor-pointer hover:bg-gray-700/20 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
                     onClick={() => handleSort('sales')}
                   >
-                    매출(억) ⓘ <SortIcon field="sales" />
+                    매출(억) ⓘ <SortIcon field="sales" sortField={sortField} sortDirection={sortDirection} />
                   </th>
                   <th
                     className={`px-4 py-3 text-right text-sm font-semibold cursor-pointer hover:bg-gray-700/20 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
                     onClick={() => handleSort('operatingIncome')}
                   >
-                    영업이익(억) ⓘ <SortIcon field="operatingIncome" />
+                    영업이익(억) ⓘ <SortIcon field="operatingIncome" sortField={sortField} sortDirection={sortDirection} />
                   </th>
                   <th
                     className={`px-4 py-3 text-right text-sm font-semibold cursor-pointer hover:bg-gray-700/20 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
                     onClick={() => handleSort('netIncome')}
                   >
-                    순이익(억) ⓘ <SortIcon field="netIncome" />
+                    순이익(억) ⓘ <SortIcon field="netIncome" sortField={sortField} sortDirection={sortDirection} />
                   </th>
                   <th
                     className={`px-4 py-3 text-right text-sm font-semibold cursor-pointer hover:bg-gray-700/20 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
                     onClick={() => handleSort('per')}
                   >
-                    PER ⓘ <SortIcon field="per" />
+                    PER ⓘ <SortIcon field="per" sortField={sortField} sortDirection={sortDirection} />
                   </th>
                   <th
                     className={`px-4 py-3 text-right text-sm font-semibold cursor-pointer hover:bg-gray-700/20 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
                     onClick={() => handleSort('pbr')}
                   >
-                    PBR ⓘ <SortIcon field="pbr" />
+                    PBR ⓘ <SortIcon field="pbr" sortField={sortField} sortDirection={sortDirection} />
                   </th>
                 </tr>
               </thead>

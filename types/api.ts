@@ -1,19 +1,19 @@
 // API Response Types
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: {
     message: string;
     code?: string;
-    details?: any;
+    details?: Record<string, unknown>;
     timestamp?: string;
     path?: string;
   };
   timestamp?: string;
 }
 
-export interface PaginatedResponse<T = any> {
+export interface PaginatedResponse<T = unknown> {
   data: T[];
   pagination: {
     page: number;
@@ -30,7 +30,7 @@ export interface ApiErrorResponse {
   error: {
     message: string;
     code?: string;
-    details?: any;
+    details?: Record<string, unknown>;
     timestamp: string;
     path?: string;
   };

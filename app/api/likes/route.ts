@@ -3,7 +3,7 @@ import { handleApiError, successResponse, ApiError } from '@/lib/api/errors';
 import { likeSchema } from '@/lib/utils/validations';
 
 // In-memory storage for likes
-let likes: Array<{ id: string; userId: string; postId: string; createdAt: Date }> = [];
+const likes: Array<{ id: string; userId: string; postId: string; createdAt: Date }> = [];
 
 export async function GET(request: NextRequest) {
   try {
