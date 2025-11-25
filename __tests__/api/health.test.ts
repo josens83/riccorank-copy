@@ -2,6 +2,11 @@
  * @jest-environment node
  */
 
+// Extend global namespace for tests
+declare global {
+  var GET: () => Promise<Response>;
+}
+
 // Mock Next.js server Response
 global.Response = class Response {
   constructor(private body: BodyInit | null, private init?: ResponseInit) {}
@@ -13,26 +18,29 @@ global.Response = class Response {
   get status() {
     return this.init?.status || 200;
   }
-} as any;
+} as unknown as typeof Response;
 
 // Mock NextResponse
 jest.mock('next/server', () => ({
   NextResponse: {
-    json: (data: any, init?: ResponseInit) => {
+    json: (data: unknown, init?: ResponseInit) => {
       return new Response(JSON.stringify(data), init);
     },
   },
 }));
 
+// Make this file a module
+export {};
+
 describe('Health Check API', () => {
   beforeAll(async () => {
     // Import after mocks are set up
     const { GET } = await import('@/app/api/health/route');
-    (global as any).GET = GET;
+    global.GET = GET;
   });
 
   it('should return healthy status', async () => {
-    const response = await (global as any).GET();
+    const response = await global.GET();
     const data = await response.json();
 
     expect(data.status).toBe('healthy');
@@ -42,12 +50,12 @@ describe('Health Check API', () => {
   });
 
   it('should return 200 status code', async () => {
-    const response = await (global as any).GET();
+    const response = await global.GET();
     expect(response.status).toBe(200);
   });
 
   it('should include timestamp in ISO format', async () => {
-    const response = await (global as any).GET();
+    const response = await global.GET();
     const data = await response.json();
 
     const timestamp = new Date(data.timestamp);
@@ -55,7 +63,7 @@ describe('Health Check API', () => {
   });
 
   it('should include uptime as a number', async () => {
-    const response = await (global as any).GET();
+    const response = await global.GET();
     const data = await response.json();
 
     expect(typeof data.uptime).toBe('number');

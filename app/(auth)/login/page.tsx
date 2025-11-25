@@ -38,7 +38,8 @@ export default function LoginPage() {
         router.push(callbackUrl);
         router.refresh();
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Login error:', error);
       setError('로그인 중 오류가 발생했습니다');
     } finally {
       setIsLoading(false);
@@ -49,7 +50,8 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       await signIn('google', { callbackUrl });
-    } catch (err) {
+    } catch (error) {
+      console.error('Google login error:', error);
       setError('Google 로그인 중 오류가 발생했습니다');
       setIsLoading(false);
     }
